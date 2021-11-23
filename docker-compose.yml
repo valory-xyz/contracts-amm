@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  hardhat:
+    container_name: hardhat
+    image: "node:16.7.0"
+    ports:
+      - "8545:8545"
+    volumes:
+      - ./third_party/safe-contracts:/home/ubuntu/safe-contracts
+      - ./third_party/v2-core:/home/ubuntu/v2-core
+      - ./third_party/v2-periphery:/home/ubuntu/v2-periphery
+    working_dir: /home/ubuntu/build
+    entrypoint: "/bin/bash"
+    command: [ "/usr/local/bin/yarn", "run", "hardhat", "node", "--port", "8545"]
+    networks:
+      localnet:
+        ipv4_address: 192.167.11.2
+    restart: always
