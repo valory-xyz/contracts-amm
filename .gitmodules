@@ -1,0 +1,9 @@
+[submodule "third_party/safe-contracts"]
+	path = third_party/safe-contracts
+	url = https://github.com/gnosis/safe-contracts
+[submodule "third_party/v2-periphery"]
+	path = third_party/v2-periphery
+	url = https://github.com/Uniswap/v2-periphery
+[submodule "third_party/v2-core"]
+	path = third_party/v2-core
+	url = https://github.com/Uniswap/v2-core
