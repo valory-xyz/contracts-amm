@@ -21,17 +21,25 @@ async function main() {
   const WETH = await hre.ethers.getContractFactory("third_party/canonical-weth/contracts/WETH9.sol:WETH9");
   const weth = await WETH.deploy();
 
-  // We get the contract to deploy
-  // const Router = await hre.ethers.getContractFactory("UniswapV2Router02");
-  // const router = await Router.deploy();
+  // Deploy Uniswap factory
+  feeToSetter_address = "0xc0ffee254729296a45a3885639AC7E10F9d54979";
+  const Factory = await hre.ethers.getContractFactory("UniswapV2Factory");
+  const factory = await Factory.deploy(feeToSetter_address);
+
+  await weth.deployed();
+  await factory.deployed();
+
+  // Deploy Router02
+  const Router = await hre.ethers.getContractFactory("UniswapV2Router02");
+  const router = await Router.deploy(factory.address, weth.address);
 
   await safe.deployed();
-  await weth.deployed();
-  // await router.deployed(factory, weth);
+  await router.deployed();
 
   console.log("Safe deployed to:", safe.address);
   console.log("WETH deployed to:", weth.address);
-  // console.log("Router deployed to:", router.address);
+  console.log("Uniswap factory deployed to:", factory.address);
+  console.log("Router deployed to:", router.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
