@@ -1,4 +1,6 @@
 require("@nomiclabs/hardhat-waffle");
+require("solidity-coverage");
+require('hardhat-deploy');
 
 // This is a sample Hardhat task. To learn how to create your own go to
 // https://hardhat.org/guides/create-task.html

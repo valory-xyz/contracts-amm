@@ -29,6 +29,11 @@ npx hardhat test
 npx hardhat node
 node scripts/sample-script.js
 npx hardhat help
+```
+
+To run a node and deploy to it
+```shell
+npx hardhat node
 npx hardhat deploy --network ganache
 ```
 
