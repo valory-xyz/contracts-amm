@@ -14,7 +14,7 @@ async function main() {
   // await hre.run('compile');
 
   // We get the contract to deploy
-  const Safe = await hre.ethers.getContractFactory("third_party/safe-contracts/contracts/GnosisSafe.sol");
+  const Safe = await hre.ethers.getContractFactory("GnosisSafe");
   const safe = await Safe.deploy();
 
   // We get the contract to deploy
@@ -22,10 +22,10 @@ async function main() {
   // const router = await Router.deploy();
 
   await safe.deployed();
-  await router.deployed();
+  // await router.deployed();
 
   console.log("Safe deployed to:", safe.address);
-  console.log("Router deployed to:", router.address);
+  // console.log("Router deployed to:", router.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
