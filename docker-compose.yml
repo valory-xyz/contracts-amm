@@ -3,7 +3,9 @@ version: '3'
 services:
   hardhat:
     container_name: hardhat
-    image: "node:16.7.0"
+    build:
+      dockerfile: Dockerfile
+      context: .
     ports:
       - "8545:8545"
     volumes:
@@ -13,7 +15,4 @@ services:
     working_dir: /home/ubuntu/build
     entrypoint: "/bin/bash"
     command: [ "/usr/local/bin/yarn", "run", "hardhat", "node", "--port", "8545"]
-    networks:
-      localnet:
-        ipv4_address: 192.167.11.2
     restart: always
