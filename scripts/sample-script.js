@@ -22,7 +22,7 @@ async function main() {
   const weth = await WETH.deploy();
 
   // Deploy Uniswap factory
-  feeToSetter_address = "0xc0ffee254729296a45a3885639AC7E10F9d54979";
+  feeToSetter_address = "0xc0ffee254729296a45a3885639AC7E10F9d54979"; // random for now
   const Factory = await hre.ethers.getContractFactory("UniswapV2Factory");
   const factory = await Factory.deploy(feeToSetter_address);
 
@@ -39,7 +39,7 @@ async function main() {
   console.log("Safe deployed to:", safe.address);
   console.log("WETH deployed to:", weth.address);
   console.log("Uniswap factory deployed to:", factory.address);
-  console.log("Router deployed to:", router.address);
+  console.log("Router02 deployed to:", router.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
