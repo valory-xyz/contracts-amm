@@ -13,18 +13,24 @@ async function main() {
   // manually to make sure everything is compiled
   // await hre.run('compile');
 
-  // We get the contract to deploy
+  // Deploy gnosis safe
   const Safe = await hre.ethers.getContractFactory("GnosisSafe");
   const safe = await Safe.deploy();
+
+  // Deploy WETH
+  const WETH = await hre.ethers.getContractFactory("third_party/canonical-weth/contracts/WETH9.sol:WETH9");
+  const weth = await WETH.deploy();
 
   // We get the contract to deploy
   // const Router = await hre.ethers.getContractFactory("UniswapV2Router02");
   // const router = await Router.deploy();
 
   await safe.deployed();
-  // await router.deployed();
+  await weth.deployed();
+  // await router.deployed(factory, weth);
 
   console.log("Safe deployed to:", safe.address);
+  console.log("WETH deployed to:", weth.address);
   // console.log("Router deployed to:", router.address);
 }
 

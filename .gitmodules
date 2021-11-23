@@ -7,3 +7,6 @@
 [submodule "third_party/v2-core"]
 	path = third_party/v2-core
 	url = https://github.com/Uniswap/v2-core
+[submodule "third_party/canonical-weth"]
+	path = third_party/canonical-weth
+	url = https://github.com/gnosis/canonical-weth.git
