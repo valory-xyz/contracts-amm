@@ -14,12 +14,12 @@ async function main() {
   // await hre.run('compile');
 
   // We get the contract to deploy
-  const Safe = await hre.ethers.getContractFactory("Gnosis");
+  const Safe = await hre.ethers.getContractFactory("third_party/safe-contracts/contracts/GnosisSafe.sol");
   const safe = await Safe.deploy();
 
   // We get the contract to deploy
-  const Router = await hre.ethers.getContractFactory("UniswapV2Router02");
-  const router = await Router.deploy();
+  // const Router = await hre.ethers.getContractFactory("UniswapV2Router02");
+  // const router = await Router.deploy();
 
   await safe.deployed();
   await router.deployed();

@@ -1,0 +1,10 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "GnosisSafeStorage",
+  "sourceName": "third_party/safe-contracts/contracts/libraries/GnosisSafeStorage.sol",
+  "abi": [],
+  "bytecode": "0x6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea2646970667358221220611f39cc11a651e9a58733f46c0b0352169cd6ec1697849510fca1027a3d276464736f6c63430008000033",
+  "deployedBytecode": "0x6080604052600080fdfea2646970667358221220611f39cc11a651e9a58733f46c0b0352169cd6ec1697849510fca1027a3d276464736f6c63430008000033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

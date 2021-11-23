@@ -1,0 +1,29 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "TestHandler",
+  "sourceName": "third_party/safe-contracts/contracts/test/TestHandler.sol",
+  "abi": [
+    {
+      "inputs": [],
+      "name": "dudududu",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "sender",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "manager",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x6080604052348015600f57600080fd5b5060cc8061001e6000396000f3fe6080604052348015600f57600080fd5b506004361060285760003560e01c806354955e5914602d575b600080fd5b60336048565b604051603f929190606f565b60405180910390f35b6000806051605f565b6057606b565b915091509091565b60131936013560601c90565b3390565b73ffffffffffffffffffffffffffffffffffffffff9283168152911660208201526040019056fea264697066735822122022d360269f64a48cac8c94923055df3dcebd6efd4819bbea5dda123042c8d60564736f6c63430008000033",
+  "deployedBytecode": "0x6080604052348015600f57600080fd5b506004361060285760003560e01c806354955e5914602d575b600080fd5b60336048565b604051603f929190606f565b60405180910390f35b6000806051605f565b6057606b565b915091509091565b60131936013560601c90565b3390565b73ffffffffffffffffffffffffffffffffffffffff9283168152911660208201526040019056fea264697066735822122022d360269f64a48cac8c94923055df3dcebd6efd4819bbea5dda123042c8d60564736f6c63430008000033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

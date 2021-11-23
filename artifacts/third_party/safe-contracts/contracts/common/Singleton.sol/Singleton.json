@@ -1,0 +1,10 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "Singleton",
+  "sourceName": "third_party/safe-contracts/contracts/common/Singleton.sol",
+  "abi": [],
+  "bytecode": "0x6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea26469706673582212207091c4ce32e200625c6df2bdd6fa0e652f21e889aa0d7962955ef3a3fde3e3be64736f6c63430008000033",
+  "deployedBytecode": "0x6080604052600080fdfea26469706673582212207091c4ce32e200625c6df2bdd6fa0e652f21e889aa0d7962955ef3a3fde3e3be64736f6c63430008000033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

@@ -20,6 +20,24 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
   solidity: {
     compilers: [
       {
+        version: "0.5.16",
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 1000,
+          },
+        },
+      },
+      {
+        version: "0.6.6",
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 1000,
+          },
+        },
+      },
+      {
         version: "0.7.1",
         settings: {
           optimizer: {
@@ -37,7 +55,22 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
           },
         },
       },
+      {
+        version: "0.8.0",
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 1000,
+          },
+        },
+      },
     ],
+  },
+  paths: {
+    sources: "./third_party/safe-contracts/contracts",
+    tests: "./test",
+    cache: "./cache",
+    artifacts: "./artifacts"
   },
   networks: {
     ganache: {
