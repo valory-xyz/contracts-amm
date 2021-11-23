@@ -19,7 +19,7 @@ async function main() {
 
   // We get the contract to deploy
   const Router = await hre.ethers.getContractFactory("UniswapV2Router02");
-  const router = await router.deploy();
+  const router = await Router.deploy();
 
   await safe.deployed();
   await router.deployed();
