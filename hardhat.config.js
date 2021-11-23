@@ -55,19 +55,10 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
           },
         },
       },
-      {
-        version: "0.8.0",
-        settings: {
-          optimizer: {
-            enabled: true,
-            runs: 1000,
-          },
-        },
-      },
     ],
   },
   paths: {
-    sources: "./third_party/safe-contracts/contracts",
+    sources: "./third_party",
     tests: "./test",
     cache: "./cache",
     artifacts: "./artifacts"
