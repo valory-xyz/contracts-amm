@@ -31,10 +31,10 @@ node scripts/sample-script.js
 npx hardhat help
 ```
 
-To run a node and deploy to it
+To run a node and deploy to it:
 ```shell
 npx hardhat node
-npx hardhat deploy --network ganache
+npx hardhat run --network localhost scripts/deploy.js
 ```
 
 For useful documentation check out [ethers](https://docs.ethers.io/v5/).
