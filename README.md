@@ -12,10 +12,10 @@
 
 ## Development
 
-First, [install hardhat](https://hardhat.org/getting-started/):
+First, [install hardhat](https://hardhat.org/getting-started/) and other requirements:
 
-```shell
-npm install
+```bash
+yarn
 ```
 
 Run the relevant tasks:
