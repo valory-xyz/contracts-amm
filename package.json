@@ -21,5 +21,9 @@
     "hardhat": "^2.6.8",
     "hardhat-deploy": "^0.9.10",
     "solidity-coverage": "^0.7.17"
+  },
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "yargs": "^17.2.1"
   }
 }

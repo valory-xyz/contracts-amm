@@ -27,7 +27,7 @@ npx hardhat coverage
 npx hardhat clean
 npx hardhat test
 npx hardhat node
-node scripts/sample-script.js
+node scripts/deploy.js
 npx hardhat help
 ```
 

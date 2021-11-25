@@ -1,6 +1,40 @@
 require("@nomiclabs/hardhat-waffle");
 require("solidity-coverage");
 require('hardhat-deploy');
+// import('hardhat/config').HardhatUserConfig;
+// import('hardhat/config').HttpNetworkUserConfig;
+// import("dotenv").dotenv;
+// import("yargs").yargs;
+
+// const argv = yargs
+//   .option("network", {
+//     type: "string",
+//     default: "hardhat",
+//   })
+//   .help(false)
+//   .version(false).argv; 
+
+// // Load environment variables.
+// dotenv.config();
+// const { NODE_URL, INFURA_KEY, MNEMONIC, ETHERSCAN_API_KEY, PK, SOLIDITY_VERSION, SOLIDITY_SETTINGS } = process.env;
+
+// const DEFAULT_MNEMONIC =
+//   "candy maple cake sugar pudding cream honey rich smooth crumble sweet treat";
+
+// const sharedNetworkConfig: HttpNetworkUserConfig = {};
+// if (PK) {
+//   sharedNetworkConfig.accounts = [PK];
+// } else {
+//   sharedNetworkConfig.accounts = {
+//     mnemonic: MNEMONIC || DEFAULT_MNEMONIC,
+//   };
+// }
+
+// if (["mainnet", "ropsten", "rinkeby", "kovan", "goerli"].includes(argv.network) && INFURA_KEY === undefined) {
+//   throw new Error(
+//     `Could not find Infura key in env, unable to connect to network ${argv.network}`,
+//   );
+// }
 
 // This is a sample Hardhat task. To learn how to create your own go to
 // https://hardhat.org/guides/create-task.html
@@ -12,8 +46,11 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
   }
 });
 
-// You need to export an object to set up your config
-// Go to https://hardhat.org/config/ to learn more
+task("deploy-contracts", "Deploys and verifies contracts")
+  .setAction(async (_, hre) => {
+      await hre.run("deploy")
+  });
+
 
 /**
  * @type import('hardhat/config').HardhatUserConfig
