@@ -1,23 +1,20 @@
 module.exports = async (hre) => {
     // Send tokens to traders
-    const accounts = ["0xC8b5Fa6F45d42FeD46156B5CbD543edD0d8D18aB",
-                      "0xA8705818909Cc6E5748a703857C4C9Fd37f881ac",
-                      "0x99C49aF33d27D64A95E6F8F190c4FBc23dBEFAF7",
-                      "0x38C1A04b64D653352edef30Df28F8871a93Eb1E5"];
+    const accounts = await hre.ethers.getSigners();
 
     tokenA = await hre.ethers.getContractAt("ERC20PresetFixedSupply", "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9");
 
-    owner_balance = await tokenA.balanceOf(tokenA_owner);
-    console.log("Token A owner balance: ", owner_balance.toString());
-    account_balance = await tokenA.balanceOf(accounts[0]);
-    console.log("Account balance: ", account_balance.toString());
+    // Send from token owner to accounts
+    for (let i = 10; i < accounts.length; i++) {
+        await tokenA.transfer(accounts[i].address, 10000);
+    }
 
-    await tokenA.transferFrom(owner_balance, accounts[0], 100);
+    // Send from account to account
+    // await tokenA.connect(accounts[3]).transfer(accounts[5].address, 10);
 
-    owner_balance = await tokenA.balanceOf(tokenA_owner);
-    console.log("Token A owner balance: ", owner_balance.toString());
-    account_balance = await tokenA.balanceOf(accounts[0]);
-    console.log("Account balance: ", account_balance.toString());
-
+    for (const account of accounts) {
+      balance = await tokenA.balanceOf(account.address);
+      console.log("Balance of ", account.address, balance.toString());
+    }
   };
   module.exports.tags = ['singleton', 'main-suite'];
