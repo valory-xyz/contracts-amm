@@ -3,6 +3,7 @@ module.exports = async (hre) => {
     const accounts = await hre.ethers.getSigners();
 
     tokenA = await hre.ethers.getContractAt("ERC20PresetFixedSupply", "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9");
+    tokenB = await hre.ethers.getContractAt("ERC20PresetFixedSupply", "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707");
 
     // Send from token owner to accounts
     for (let i = 10; i < accounts.length; i++) {
