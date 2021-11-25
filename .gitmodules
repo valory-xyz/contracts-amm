@@ -10,3 +10,6 @@
 [submodule "third_party/canonical-weth"]
 	path = third_party/canonical-weth
 	url = https://github.com/gnosis/canonical-weth.git
+[submodule "third_party/openzeppelin-contracts"]
+	path = third_party/openzeppelin-contracts
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts
