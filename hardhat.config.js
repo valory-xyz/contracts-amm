@@ -12,7 +12,7 @@ require('hardhat-deploy');
 //     default: "hardhat",
 //   })
 //   .help(false)
-//   .version(false).argv; 
+//   .version(false).argv;
 
 // // Load environment variables.
 // dotenv.config();
@@ -87,6 +87,24 @@ task("deploy-contracts", "Deploys and verifies contracts")
       },
       {
         version: "0.7.0",
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 1000,
+          },
+        },
+      },
+      {
+        version: "0.8.0", // When adding versions >= 0.8.0, some math libraries from uniswap will fail to compile.
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 1000,
+          },
+        },
+      },
+      {
+        version: "0.8.2",
         settings: {
           optimizer: {
             enabled: true,
