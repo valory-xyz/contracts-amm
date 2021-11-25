@@ -8,6 +8,7 @@ module.exports = async (hre) => {
     // Send from token owner to accounts
     for (let i = 10; i < accounts.length; i++) {
         await tokenA.transfer(accounts[i].address, 10000);
+        await tokenB.transfer(accounts[i].address, 1000); // Error: ERC20: transfer amount exceeds balance'
     }
 
     // Send from account to account
