@@ -52,7 +52,8 @@ task("deploy-contracts", "Deploys and verifies contracts")
   });
 
 task("extra-compile", "Compile, updates contracts, then run node")
-  .setAction(async (_, hre) => {
+  .addParam("port", "The port for the node")
+  .setAction(async (taskArgs, hre) => {
       await hre.run("compile")
 
       var json = require('./artifacts/third_party/v2-core/contracts/UniswapV2Pair.sol/UniswapV2Pair.json')
@@ -73,7 +74,7 @@ task("extra-compile", "Compile, updates contracts, then run node")
         });
       });
       
-      await hre.run("node")
+      await hre.run("node", {port: parseInt(taskArgs.port)})
   });
 
 
