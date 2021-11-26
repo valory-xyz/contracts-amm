@@ -14,67 +14,100 @@ module.exports = async (hre) => {
     weth = await hre.ethers.getContractAt("./third_party/canonical-weth/contracts/WETH9.sol:WETH9", weth_address);
     tokenA = await hre.ethers.getContractAt("ERC20PresetFixedSupply", tokenA_address);
     tokenB = await hre.ethers.getContractAt("ERC20PresetFixedSupply", tokenB_address);
-    // tokenB = await hre.ethers.getContractAt("UniswapV2ERC20", tokenB_address);
 
-    console.log(await router.factory())
-    console.log(factory.address)
+    await router.factory() == factory.address
+    await router.WETH() == weth.address
+
+    // to check this satisfies uniswap format
+    tokenA = await hre.ethers.getContractAt("UniswapV2ERC20", tokenA_address);
+    tokenB = await hre.ethers.getContractAt("UniswapV2ERC20", tokenB_address);
+
 
     // Deploy pools A-WETH and B-WETH
-    pairAWETH = await factory.createPair(tokenA_address, weth_address); // Why does this return a tx and not an address?
-    pairAWETHdata = factory.interface.decodeFunctionData("createPair", pairAWETH.data);
+    pairAWETH_tx_receipt = await factory.createPair(tokenA_address, weth_address);
+    pairAWETHdata = factory.interface.decodeFunctionData("createPair", pairAWETH_tx_receipt.data);
     console.log("Token A - WETH pool:", pairAWETHdata[0], pairAWETHdata[1]); // Why do we have 2 addresses here?
     pair_address = await factory.allPairs(0);
     console.log("pairAWETH:" ,pair_address);
-    pair = await hre.ethers.getContractAt("UniswapV2Pair", pair_address);
-    reserves = await pair.getReserves();
+    pairA = await hre.ethers.getContractAt("UniswapV2Pair", pair_address);
+    reserves = await pairA.getReserves();
     console.log("reserves:" ,reserves);
 
-    pairBWETH = await factory.createPair(tokenB_address, weth_address);
-    pairBWETHdata = factory.interface.decodeFunctionData("createPair", pairBWETH.data);
+    pairBWETH_tx_receipt = await factory.createPair(tokenB_address, weth_address);
+    pairBWETHdata = factory.interface.decodeFunctionData("createPair", pairBWETH_tx_receipt.data);
     console.log("Token B - WETH pool:", pairBWETHdata[0], pairBWETHdata[1]);
     pair_address = await factory.allPairs(1);
     console.log("pairBWETH:" ,pair_address);
-    pair = await hre.ethers.getContractAt("UniswapV2Pair", pair_address);
-    reserves = await pair.getReserves();
+    pairB = await hre.ethers.getContractAt("UniswapV2Pair", pair_address);
+    reserves = await pairB.getReserves();
     console.log("reserves:" ,reserves);
 
     // Set the token allowances for the router contract
-    ALLOWANCE = 1000000;
-
+    ALLOWANCE = 10 ** 10;
     for (let i = 10; i < accounts.length; i++) {
-      await weth.connect(accounts[10]).approve(router_address, ALLOWANCE);
-      await tokenA.connect(accounts[10]).approve(router_address, ALLOWANCE);
-      await tokenB.connect(accounts[10]).approve(router_address, ALLOWANCE);
+      // weth
+      res = weth.balanceOf(accounts[i].address)
+      ALLOWANCE <= res
+      await weth.connect(accounts[i]).approve(router_address, ALLOWANCE);
+      res = await weth.allowance(accounts[i].address, router_address)
+      ALLOWANCE == res
+      // tokenA
+      res = tokenA.balanceOf(accounts[i].address)
+      ALLOWANCE <= res
+      await tokenA.connect(accounts[i]).approve(router_address, ALLOWANCE);
+      res = await tokenA.allowance(accounts[i].address, router_address)
+      ALLOWANCE == res
+      // tokenB
+      res = tokenB.balanceOf(accounts[i].address)
+      ALLOWANCE <= res
+      await tokenB.connect(accounts[i]).approve(router_address, ALLOWANCE);
+      res = await tokenB.allowance(accounts[i].address, router_address)
+      ALLOWANCE == res
     }
 
     // await coin.approve(router_address, constants.MaxUint256);
 
     // Add liquidity
-    amount_A = 10
-    min_amount_A = 9
-    amount_WETH = 5
-    min_amount_WETH = 4
+    amount_A = 10 ** 4
+    min_amount_A = 10 ** 3
+    amount_WETH = 10 ** 4
+    amount_ETH = amount_WETH
+    min_amount_WETH = 10 ** 3
+    min_amount_ETH = min_amount_WETH
     deadline = Date.now() + 1000
-    trader_address_index = accounts[10].address
     to_address = accounts[10].address;
 
+
+    // sanity checks
+    MINIMUM_LIQUIDITY = 10 ** 3
+    amount_A < ALLOWANCE
+    amount_WETH < ALLOWANCE
+    amount_A > MINIMUM_LIQUIDITY
+    amount_WETH > MINIMUM_LIQUIDITY
+
     router.connect(accounts[10]).addLiquidity(
+      weth.address,
       tokenA.address,
-      tokenB.address,
       amount_A,
       amount_WETH,
       min_amount_A,
       min_amount_WETH,
       to_address,
       deadline
-    ); // Error: Transaction reverted: function call to a non-contract account
+    );
 
-    // router.connect(accounts[10]).addLiquidityETH(
-    //   tokenA_address,
-    //   amount_A,
-    //   min_amount_A,
-    //   min_amount_WETH,
-    //   to_address,
-    //   deadline
-    // ); // Error: Transaction reverted: function call to a non-contract account
+    // Possible errors and resolutions:
+    // TransferHelper::transferFrom: transferFrom failed > likely allowance or actual amount of tokens owned too low!
+    // ds-math-sub-underflow > likely minimum liquidity undercut!
+    // strange error with it claiming address is not a contract: https://github.com/Uniswap/v2-core/issues/102
+
+    router.connect(accounts[10]).addLiquidityETH(
+      tokenA.address,
+      amount_A,
+      min_amount_A,
+      min_amount_ETH,
+      to_address,
+      deadline,
+      {value: amount_ETH}
+    );
   };
