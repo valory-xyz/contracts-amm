@@ -4,12 +4,15 @@ module.exports = async (hre) => {
 
     // Get relevant contracts
     weth_address = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
+    factory_address = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0";
     router_address = "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9";
+    tokenA_address = "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9";
+    tokenB_address = "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707";
 
     router = await hre.ethers.getContractAt("UniswapV2Router02", router_address);
-    factory = await hre.ethers.getContractAt("UniswapV2Factory", "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0");
-    tokenA = await hre.ethers.getContractAt("ERC20PresetFixedSupply", "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9");
-    tokenB = await hre.ethers.getContractAt("ERC20PresetFixedSupply", "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707");
+    factory = await hre.ethers.getContractAt("UniswapV2Factory", factory_address);
+    tokenA = await hre.ethers.getContractAt("ERC20PresetFixedSupply", tokenA_address);
+    tokenB = await hre.ethers.getContractAt("ERC20PresetFixedSupply", tokenB_address);
 
     // Deploy pools A-WETH and B-WETH
     pairAWETH = await factory.createPair(accounts[0].address, weth_address);
@@ -28,5 +31,14 @@ module.exports = async (hre) => {
     deadline = Date.now() + 1000
     to_address = accounts[10].address
 
-    // router.connect(accounts[10]).addLiquidity(tokenA.address, weth_address, amount_A, amount_WETH, min_amount_A, 4, to_address, deadline);
+    // router.connect(accounts[10]).addLiquidity(
+    //   tokenA.address,
+    //   weth_address,
+    //   amount_A,
+    //   amount_WETH,
+    //   min_amount_A,
+    //   min_amount_WETH,
+    //   to_address,
+    //   deadline
+    // );
   };
