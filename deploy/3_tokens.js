@@ -18,5 +18,21 @@ module.exports = async (hre) => {
     console.log("Token A deployed to:", tokenA.address);
     console.log("Token B deployed to:", tokenB.address);
 
+    // Send from token owner to accounts
+    for (let i = 10; i < accounts.length; i++) {
+        await tokenA.connect(accounts[0]).transfer(accounts[i].address, 10000);
+        await tokenB.connect(accounts[1]).transfer(accounts[i].address, 50000);
+    }
+
+    // Send from account to account
+    // await tokenA.connect(accounts[3]).transfer(accounts[5].address, 10);
+
+    for (const account of accounts) {
+      balance = await tokenA.balanceOf(account.address);
+      console.log("Balance for token A of ", account.address, balance.toString());
+      balance = await tokenB.balanceOf(account.address);
+      console.log("Balance for token B of ", account.address, balance.toString());
+    }
+
   };
   module.exports.tags = ['singleton', 'main-suite'];
