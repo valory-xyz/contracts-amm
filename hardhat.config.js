@@ -132,15 +132,12 @@ task("extra-compile", "Compile, updates contracts, then run node")
   networks: {
     ganache: {
       url: 'http://localhost:8545'
-    },
-    ropsten: {
-      url: "https://ropsten.infura.io/v3/2980beeca3544c9fbace4f24218afcd4"
     }
   },
   etherscan: {
     // Your API key for Etherscan
     // Obtain one at https://etherscan.io/
-    apiKey: "S3DUK14N4RQTU4GPBXVAXY76UIHF3DCQM4"
+    apiKey: ""
   },
   hardhat: {
     forking: {
