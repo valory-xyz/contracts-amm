@@ -1,4 +1,5 @@
 module.exports = async (hre) => {
+    // Get the signers (default, pre-funded accounts)
     const accounts = await hre.ethers.getSigners();
 
     // Get relevant contracts
@@ -29,4 +30,3 @@ module.exports = async (hre) => {
 
     // router.connect(accounts[10]).addLiquidity(tokenA.address, weth_address, amount_A, amount_WETH, min_amount_A, 4, to_address, deadline);
   };
-  module.exports.tags = ['singleton', 'main-suite'];
