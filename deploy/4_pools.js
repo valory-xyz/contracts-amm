@@ -16,18 +16,22 @@ module.exports = async (hre) => {
     tokenB = await hre.ethers.getContractAt("ERC20PresetFixedSupply", tokenB_address);
 
     // Deploy pools A-WETH and B-WETH
-    pairAWETH = await factory.createPair(accounts[0].address, weth_address);
+    pairAWETH = await factory.createPair(accounts[0].address, weth_address); // Why does this return a tx and not an address?
     pairAWETHdata = factory.interface.decodeFunctionData("createPair", pairAWETH.data);
-    console.log("Token A - WETH pool:", pairAWETHdata[0], pairAWETHdata[1]);
+    console.log("Token A - WETH pool:", pairAWETHdata[0], pairAWETHdata[1]); // Why do we have 2 addresses here?
 
     pairBWETH = await factory.createPair(accounts[2].address, weth_address);
     pairBWETHdata = factory.interface.decodeFunctionData("createPair", pairBWETH.data);
     console.log("Token B - WETH pool:", pairBWETHdata[0], pairBWETHdata[1]);
 
     // Set the token allowances for the router contract
-    await weth.connect(accounts[10]).approve(router_address, 1000000);
-    await tokenA.connect(accounts[10]).approve(router_address, 1000000);
-    await tokenB.connect(accounts[10]).approve(router_address, 1000000);
+    ALLOWANCE = 1000000;
+
+    for (let i = 10; i < accounts.length; i++) {
+      await weth.connect(accounts[10]).approve(router_address, ALLOWANCE);
+      await tokenA.connect(accounts[10]).approve(router_address, ALLOWANCE);
+      await tokenB.connect(accounts[10]).approve(router_address, ALLOWANCE);
+    }
 
     // await coin.approve(router_address, constants.MaxUint256);
 
