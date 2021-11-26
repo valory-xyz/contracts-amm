@@ -7,8 +7,8 @@ module.exports = async (hre) => {
 
     // Send from token owner to accounts
     for (let i = 10; i < accounts.length; i++) {
-        await tokenA.transfer(accounts[i].address, 10000);
-        await tokenB.transfer(accounts[i].address, 10000);
+        await tokenA.connect(accounts[0]).transfer(accounts[i].address, 10000);
+        await tokenB.connect(accounts[1]).transfer(accounts[i].address, 50000);
     }
 
     // Send from account to account
