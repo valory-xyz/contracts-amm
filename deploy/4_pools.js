@@ -44,16 +44,16 @@ module.exports = async (hre) => {
     trader_address_index = accounts[10].address
     to_address = accounts[10].address;
 
-    // router.connect(accounts[10]).addLiquidity(
-    //   tokenA_address,
-    //   weth_address,
-    //   amount_A,
-    //   amount_WETH,
-    //   min_amount_A,
-    //   min_amount_WETH,
-    //   to_address,
-    //   deadline
-    // );
+    router.connect(accounts[10]).addLiquidity(
+      tokenA_address,
+      weth_address,
+      amount_A,
+      amount_WETH,
+      min_amount_A,
+      min_amount_WETH,
+      to_address,
+      deadline
+    ); // Error: Transaction reverted: function call to a non-contract account
 
     // router.connect(accounts[10]).addLiquidityETH(
     //   tokenA_address,
@@ -62,5 +62,5 @@ module.exports = async (hre) => {
     //   min_amount_WETH,
     //   to_address,
     //   deadline
-    // );
+    // ); // Error: Transaction reverted: function call to a non-contract account
   };
