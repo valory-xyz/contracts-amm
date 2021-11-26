@@ -51,6 +51,31 @@ task("deploy-contracts", "Deploys and verifies contracts")
       await hre.run("deploy")
   });
 
+task("extra-compile", "Compile, updates contracts, then run node")
+  .setAction(async (_, hre) => {
+      await hre.run("compile")
+
+      var json = require('./artifacts/third_party/v2-core/contracts/UniswapV2Pair.sol/UniswapV2Pair.json')
+      actual_bytecode = json["bytecode"]
+      init_hash = hre.ethers.utils.keccak256(actual_bytecode)
+      init_hash_replace = init_hash.slice(2)
+      // const STANDARD_HASH = "96e8ac4277198ff8b6f785478aa9a39f403cb768dd02cbee326c3e7da348845f"
+      const fs = require('fs')
+      const path = './third_party/v2-periphery/contracts/libraries/UniswapV2Library.sol'
+      fs.readFile(path, 'utf8', function (err,data) {
+        if (err) {
+          return console.log(err);
+        }
+        var result = data.replace(/96e8ac4277198ff8b6f785478aa9a39f403cb768dd02cbee326c3e7da348845f/g, init_hash_replace);
+
+        fs.writeFile(path, result, 'utf8', function (err) {
+           if (err) return console.log(err);
+        });
+      });
+      
+      await hre.run("node")
+  });
+
 
 /**
  * @type import('hardhat/config').HardhatUserConfig
@@ -69,10 +94,11 @@ task("deploy-contracts", "Deploys and verifies contracts")
       },
       {
         version: "0.6.6",
+        evmVersion: "istanbul",
         settings: {
           optimizer: {
             enabled: true,
-            runs: 1000,
+            runs: 999999,
           },
         },
       },
