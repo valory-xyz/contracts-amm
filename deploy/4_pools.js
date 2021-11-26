@@ -14,40 +14,34 @@ module.exports = async (hre) => {
     weth = await hre.ethers.getContractAt("./third_party/canonical-weth/contracts/WETH9.sol:WETH9", weth_address);
     tokenA = await hre.ethers.getContractAt("ERC20PresetFixedSupply", tokenA_address);
     tokenB = await hre.ethers.getContractAt("ERC20PresetFixedSupply", tokenB_address);
-    // tokenB = await hre.ethers.getContractAt("UniswapV2ERC20", tokenB_address);
-
-    console.log(await router.factory())
-    console.log(factory.address)
 
     // Deploy pools A-WETH and B-WETH
-    pairAWETH = await factory.createPair(tokenA_address, weth_address); // Why does this return a tx and not an address?
-    pairAWETHdata = factory.interface.decodeFunctionData("createPair", pairAWETH.data);
-    console.log("Token A - WETH pool:", pairAWETHdata[0], pairAWETHdata[1]); // Why do we have 2 addresses here?
-    pair_address = await factory.allPairs(0);
-    console.log("pairAWETH:" ,pair_address);
-    pair = await hre.ethers.getContractAt("UniswapV2Pair", pair_address);
-    reserves = await pair.getReserves();
-    console.log("reserves:" ,reserves);
+    pair_AWETH = await factory.createPair(tokenA_address, weth_address);
+    pair_AWETH_address = await factory.allPairs(0);
+    contract_AWETH = await hre.ethers.getContractAt("UniswapV2Pair", pair_AWETH_address);
+    reserves_AWETH = await contract_AWETH.getReserves();
+    console.log("Token A - WETH pool:", pair_AWETH_address.toString(), " Reserves:", reserves_AWETH[0].toString(), reserves_AWETH[1].toString());
 
-    pairBWETH = await factory.createPair(tokenB_address, weth_address);
-    pairBWETHdata = factory.interface.decodeFunctionData("createPair", pairBWETH.data);
-    console.log("Token B - WETH pool:", pairBWETHdata[0], pairBWETHdata[1]);
-    pair_address = await factory.allPairs(1);
-    console.log("pairBWETH:" ,pair_address);
-    pair = await hre.ethers.getContractAt("UniswapV2Pair", pair_address);
-    reserves = await pair.getReserves();
-    console.log("reserves:" ,reserves);
+    pair_BWETH = await factory.createPair(tokenB_address, weth_address);
+    pair_BWETH_address = await factory.allPairs(1);
+    contract_BWETH = await hre.ethers.getContractAt("UniswapV2Pair", pair_BWETH_address);
+    reserves_BWETH = await contract_BWETH.getReserves();
+    console.log("Token B - WETH pool:", pair_BWETH_address.toString(), " Reserves:", reserves_BWETH[0].toString(), reserves_BWETH[1].toString());
 
     // Set the token allowances for the router contract
     ALLOWANCE = 1000000;
 
     for (let i = 10; i < accounts.length; i++) {
-      await weth.connect(accounts[10]).approve(router_address, ALLOWANCE);
-      await tokenA.connect(accounts[10]).approve(router_address, ALLOWANCE);
-      await tokenB.connect(accounts[10]).approve(router_address, ALLOWANCE);
-    }
+      await weth.connect(accounts[i]).approve(router_address, ALLOWANCE);
+      await tokenA.connect(accounts[i]).approve(router_address, ALLOWANCE);
+      await tokenB.connect(accounts[i]).approve(router_address, ALLOWANCE);
 
-    // await coin.approve(router_address, constants.MaxUint256);
+      // Check the allowances
+      weth_allowance = await weth.allowance(accounts[i].address, router_address);
+      tokenA_allowance = await tokenA.allowance(accounts[i].address, router_address);
+      tokenB_allowance = await tokenB.allowance(accounts[i].address, router_address);
+      console.log("Router allowances for", accounts[i].address, "WETH:", weth_allowance.toString(), "Token A:", tokenA_allowance.toString(), "Token B:", tokenB_allowance.toString())
+    }
 
     // Add liquidity
     amount_A = 10
@@ -68,13 +62,4 @@ module.exports = async (hre) => {
       to_address,
       deadline
     ); // Error: Transaction reverted: function call to a non-contract account
-
-    // router.connect(accounts[10]).addLiquidityETH(
-    //   tokenA_address,
-    //   amount_A,
-    //   min_amount_A,
-    //   min_amount_WETH,
-    //   to_address,
-    //   deadline
-    // ); // Error: Transaction reverted: function call to a non-contract account
   };
