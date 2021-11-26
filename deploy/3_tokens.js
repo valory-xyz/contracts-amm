@@ -24,14 +24,27 @@ module.exports = async (hre) => {
         await tokenB.connect(accounts[1]).transfer(accounts[i].address, 50000);
     }
 
+    // Wrap some ETH
+    weth_address = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
+    weth = await hre.ethers.getContractAt("./third_party/canonical-weth/contracts/WETH9.sol:WETH9", weth_address)
+
+    for (let i = 10; i < accounts.length; i++) {
+        // Send ETH to the WETH contract
+        await accounts[i].sendTransaction({to: weth_address, value: 1000})
+
+        // Show balance
+        weth_balance = await weth.balanceOf(accounts[i].address);
+        console.log("Balance for WETH of", accounts[i].address, weth_balance.toString());
+    }
+
     // Send from account to account
     // await tokenA.connect(accounts[3]).transfer(accounts[5].address, 10);
 
     for (const account of accounts) {
-      balance = await tokenA.balanceOf(account.address);
-      console.log("Balance for token A of ", account.address, balance.toString());
-      balance = await tokenB.balanceOf(account.address);
-      console.log("Balance for token B of ", account.address, balance.toString());
+      balanceWETH = await weth.balanceOf(account.address);
+      balanceA = await tokenA.balanceOf(account.address);
+      balanceB = await tokenB.balanceOf(account.address);
+      console.log("Balances of", account.address, balanceWETH.toString(), balanceA.toString(), balanceB.toString());
     }
 
   };
