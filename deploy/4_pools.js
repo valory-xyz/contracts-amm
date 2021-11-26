@@ -16,13 +16,18 @@ module.exports = async (hre) => {
     tokenB = await hre.ethers.getContractAt("ERC20PresetFixedSupply", tokenB_address);
 
     // Deploy pools A-WETH and B-WETH
-    pairAWETH = await factory.createPair(accounts[0].address, weth_address); // Why does this return a tx and not an address?
+    pairAWETH = await factory.createPair(tokenA_address, weth_address); // Why does this return a tx and not an address?
     pairAWETHdata = factory.interface.decodeFunctionData("createPair", pairAWETH.data);
     console.log("Token A - WETH pool:", pairAWETHdata[0], pairAWETHdata[1]); // Why do we have 2 addresses here?
+    pair = await factory.allPairs(0);
+    console.log("pairAWETH:" ,pair);
 
-    pairBWETH = await factory.createPair(accounts[2].address, weth_address);
+
+    pairBWETH = await factory.createPair(tokenB_address, weth_address);
     pairBWETHdata = factory.interface.decodeFunctionData("createPair", pairBWETH.data);
     console.log("Token B - WETH pool:", pairBWETHdata[0], pairBWETHdata[1]);
+    pair = await factory.allPairs(1);
+    console.log("pairBWETH:" ,pair);
 
     // Set the token allowances for the router contract
     ALLOWANCE = 1000000;
