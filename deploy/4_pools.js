@@ -15,8 +15,13 @@ module.exports = async (hre) => {
     tokenA = await hre.ethers.getContractAt("ERC20PresetFixedSupply", tokenA_address);
     tokenB = await hre.ethers.getContractAt("ERC20PresetFixedSupply", tokenB_address);
 
-    await router.factory() == factory.address
-    await router.WETH() == weth.address
+    
+    if (await router.factory()  != factory.address) {
+       throw new Error("incorrect amounts")
+    };
+    if (await router.WETH()  != weth.address) {
+       throw new Error("incorrect amounts")
+    };
 
     // to check this satisfies uniswap format
     tokenA = await hre.ethers.getContractAt("UniswapV2ERC20", tokenA_address);
@@ -47,25 +52,36 @@ module.exports = async (hre) => {
     for (let i = 10; i < accounts.length; i++) {
       // weth
       res = weth.balanceOf(accounts[i].address)
-      ALLOWANCE <= res
+      if (ALLOWANCE > res) {
+        throw new Error("incorrect amounts")
+      };
       await weth.connect(accounts[i]).approve(router_address, ALLOWANCE);
-      res = await weth.allowance(accounts[i].address, router_address)
-      ALLOWANCE == res
+      weth_allowance = await weth.allowance(accounts[i].address, router_address)
+      if (ALLOWANCE != weth_allowance) {
+        throw new Error("incorrect amounts")
+      };
       // tokenA
       res = tokenA.balanceOf(accounts[i].address)
-      ALLOWANCE <= res
+      if (ALLOWANCE > res) {
+        throw new Error("incorrect amounts")
+      };
       await tokenA.connect(accounts[i]).approve(router_address, ALLOWANCE);
-      res = await tokenA.allowance(accounts[i].address, router_address)
-      ALLOWANCE == res
+      tokenA_allowance = await tokenA.allowance(accounts[i].address, router_address)
+      if (ALLOWANCE != tokenA_allowance) {
+        throw new Error("incorrect amounts")
+      };
       // tokenB
       res = tokenB.balanceOf(accounts[i].address)
-      ALLOWANCE <= res
+      if (ALLOWANCE > res) {
+        throw new Error("incorrect amounts")
+      };
       await tokenB.connect(accounts[i]).approve(router_address, ALLOWANCE);
-      res = await tokenB.allowance(accounts[i].address, router_address)
-      ALLOWANCE == res
+      tokenB_allowance = await tokenB.allowance(accounts[i].address, router_address)
+      if (ALLOWANCE != tokenB_allowance) {
+        throw new Error("incorrect amounts")
+      };
+      console.log("Router allowances for", accounts[i].address, "WETH:", weth_allowance.toString(), "Token A:", tokenA_allowance.toString(), "Token B:", tokenB_allowance.toString())
     }
-
-    // await coin.approve(router_address, constants.MaxUint256);
 
     // Add liquidity
     amount_A = 10 ** 4
@@ -80,10 +96,9 @@ module.exports = async (hre) => {
 
     // sanity checks
     MINIMUM_LIQUIDITY = 10 ** 3
-    amount_A < ALLOWANCE
-    amount_WETH < ALLOWANCE
-    amount_A > MINIMUM_LIQUIDITY
-    amount_WETH > MINIMUM_LIQUIDITY
+    if ((amount_A > ALLOWANCE) || (amount_WETH > ALLOWANCE) || (amount_A < MINIMUM_LIQUIDITY) || (amount_WETH < MINIMUM_LIQUIDITY)) {
+      throw new Error("incorrect amounts")
+    };
 
     router.connect(accounts[10]).addLiquidity(
       weth.address,
