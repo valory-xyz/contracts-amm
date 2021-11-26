@@ -14,20 +14,29 @@ module.exports = async (hre) => {
     weth = await hre.ethers.getContractAt("./third_party/canonical-weth/contracts/WETH9.sol:WETH9", weth_address);
     tokenA = await hre.ethers.getContractAt("ERC20PresetFixedSupply", tokenA_address);
     tokenB = await hre.ethers.getContractAt("ERC20PresetFixedSupply", tokenB_address);
+    // tokenB = await hre.ethers.getContractAt("UniswapV2ERC20", tokenB_address);
+
+    console.log(await router.factory())
+    console.log(factory.address)
 
     // Deploy pools A-WETH and B-WETH
     pairAWETH = await factory.createPair(tokenA_address, weth_address); // Why does this return a tx and not an address?
     pairAWETHdata = factory.interface.decodeFunctionData("createPair", pairAWETH.data);
     console.log("Token A - WETH pool:", pairAWETHdata[0], pairAWETHdata[1]); // Why do we have 2 addresses here?
-    pair = await factory.allPairs(0);
-    console.log("pairAWETH:" ,pair);
-
+    pair_address = await factory.allPairs(0);
+    console.log("pairAWETH:" ,pair_address);
+    pair = await hre.ethers.getContractAt("UniswapV2Pair", pair_address);
+    reserves = await pair.getReserves();
+    console.log("reserves:" ,reserves);
 
     pairBWETH = await factory.createPair(tokenB_address, weth_address);
     pairBWETHdata = factory.interface.decodeFunctionData("createPair", pairBWETH.data);
     console.log("Token B - WETH pool:", pairBWETHdata[0], pairBWETHdata[1]);
-    pair = await factory.allPairs(1);
-    console.log("pairBWETH:" ,pair);
+    pair_address = await factory.allPairs(1);
+    console.log("pairBWETH:" ,pair_address);
+    pair = await hre.ethers.getContractAt("UniswapV2Pair", pair_address);
+    reserves = await pair.getReserves();
+    console.log("reserves:" ,reserves);
 
     // Set the token allowances for the router contract
     ALLOWANCE = 1000000;
@@ -50,8 +59,8 @@ module.exports = async (hre) => {
     to_address = accounts[10].address;
 
     router.connect(accounts[10]).addLiquidity(
-      tokenA_address,
-      weth_address,
+      tokenA.address,
+      tokenB.address,
       amount_A,
       amount_WETH,
       min_amount_A,
