@@ -34,7 +34,7 @@ module.exports = async (hre) => {
     }
 
     // Show balances for WETH, A, B
-    weth = await hre.ethers.getContractAt("./third_party/canonical-weth/contracts/WETH9.sol:WETH9", weth_address)
+    weth = await hre.ethers.getContractAt("./third_party/canonical-weth/contracts/WETH9.sol:WETH9", weth_address);
 
     for (const account of accounts) {
         balanceWETH = await weth.balanceOf(account.address);
