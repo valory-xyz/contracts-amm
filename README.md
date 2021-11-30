@@ -33,8 +33,7 @@ npx hardhat help
 
 To run a node and deploy to it:
 ```shell
-npx hardhat node
-npx hardhat run --network localhost scripts/deploy.js
+yarn run hardhat extra-compile --port <port>
 ```
 
 For useful documentation check out [ethers](https://docs.ethers.io/v5/).
