@@ -5,4 +5,9 @@ module.exports = async (hre) => {
   const safe = await Safe.deploy();
   await safe.deployed();
   console.log("Safe deployed to:", safe.address);
+
+  const Multisend = await hre.ethers.getContractFactory("MultiSend");
+  const multisend = await Multisend.deploy();
+  await multisend.deployed();
+  console.log("Multi-send deployed to:", multisend.address);
 };
