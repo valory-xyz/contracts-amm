@@ -18,7 +18,7 @@ module.exports = async (hre) => {
         }
     );
 
-    threshold = 1;
+    threshold = 3; // 3 out of 4 signers
     nonce =  new Date().getTime();
     AddressZero = "0x" + "0".repeat(40);
 
