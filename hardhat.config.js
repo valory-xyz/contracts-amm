@@ -1,6 +1,9 @@
 require("@nomiclabs/hardhat-waffle");
 require("solidity-coverage");
 require('hardhat-deploy');
+require("@ethersproject/constants");
+require("@gnosis.pm/safe-contracts");
+
 // import('hardhat/config').HardhatUserConfig;
 // import('hardhat/config').HttpNetworkUserConfig;
 // import("dotenv").dotenv;

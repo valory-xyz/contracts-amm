@@ -3,19 +3,19 @@ module.exports = async (hre) => {
     const accounts = await hre.ethers.getSigners();
 
     // Get relevant contracts
-    factory_address = "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9";
+    uniswap_factory_address = "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9";
     router_address = "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9";
     weth_address = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0";
     tokenA_address = "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707";
     tokenB_address = "0x0165878A594ca255338adfa4d48449f69242Eb8F";
 
-    factory = await hre.ethers.getContractAt("UniswapV2Factory", factory_address);
+    factory = await hre.ethers.getContractAt("UniswapV2Factory", uniswap_factory_address);
     router = await hre.ethers.getContractAt("UniswapV2Router02", router_address);
     weth = await hre.ethers.getContractAt("./third_party/canonical-weth/contracts/WETH9.sol:WETH9", weth_address);
     tokenA = await hre.ethers.getContractAt("ERC20PresetFixedSupply", tokenA_address);
     tokenB = await hre.ethers.getContractAt("ERC20PresetFixedSupply", tokenB_address);
 
-    
+
     if (await router.factory()  != factory.address) {
        throw new Error("incorrect amounts")
     };
