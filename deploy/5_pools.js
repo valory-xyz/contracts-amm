@@ -3,19 +3,19 @@ module.exports = async (hre) => {
     const accounts = await hre.ethers.getSigners();
 
     // Get relevant contracts
-    factory_address = "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9";
-    router_address = "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9";
-    weth_address = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0";
-    tokenA_address = "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707";
-    tokenB_address = "0x0165878A594ca255338adfa4d48449f69242Eb8F";
+    uniswap_factory_address = "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6";
+    router_address = "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318";
+    weth_address = "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853";
+    tokenA_address = "0x610178dA211FEF7D417bC0e6FeD39F05609AD788";
+    tokenB_address = "0xB7f8BC63BbcaD18155201308C8f3540b07f84F5e";
 
-    factory = await hre.ethers.getContractAt("UniswapV2Factory", factory_address);
+    factory = await hre.ethers.getContractAt("UniswapV2Factory", uniswap_factory_address);
     router = await hre.ethers.getContractAt("UniswapV2Router02", router_address);
     weth = await hre.ethers.getContractAt("./third_party/canonical-weth/contracts/WETH9.sol:WETH9", weth_address);
     tokenA = await hre.ethers.getContractAt("ERC20PresetFixedSupply", tokenA_address);
     tokenB = await hre.ethers.getContractAt("ERC20PresetFixedSupply", tokenB_address);
 
-    
+
     if (await router.factory()  != factory.address) {
        throw new Error("incorrect amounts")
     };
@@ -33,19 +33,19 @@ module.exports = async (hre) => {
     pairAWETHdata = factory.interface.decodeFunctionData("createPair", pairAWETH_tx_receipt.data);
     console.log("Token A - WETH pool:", pairAWETHdata[0], pairAWETHdata[1]); // Why do we have 2 addresses here?
     pair_address = await factory.allPairs(0);
-    console.log("pairAWETH:" ,pair_address);
+    console.log("Pair A - WETH address:", pair_address);
     pairA = await hre.ethers.getContractAt("UniswapV2Pair", pair_address);
     reserves = await pairA.getReserves();
-    console.log("reserves:" ,reserves);
+    console.log("Pair A - WETH reserves:", reserves.toString());
 
     pairBWETH_tx_receipt = await factory.createPair(tokenB_address, weth_address);
     pairBWETHdata = factory.interface.decodeFunctionData("createPair", pairBWETH_tx_receipt.data);
     console.log("Token B - WETH pool:", pairBWETHdata[0], pairBWETHdata[1]);
     pair_address = await factory.allPairs(1);
-    console.log("pairBWETH:" ,pair_address);
+    console.log("Pair B - WETH:", pair_address);
     pairB = await hre.ethers.getContractAt("UniswapV2Pair", pair_address);
     reserves = await pairB.getReserves();
-    console.log("reserves:" ,reserves);
+    console.log("Pair B - WETH reserves:", reserves.toString());
 
     // Set the token allowances for the router contract
     ALLOWANCE = 10 ** 10;
