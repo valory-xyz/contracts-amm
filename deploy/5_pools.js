@@ -3,11 +3,11 @@ module.exports = async (hre) => {
     const accounts = await hre.ethers.getSigners();
 
     // Get relevant contracts
-    uniswap_factory_address = "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9";
-    router_address = "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9";
-    weth_address = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0";
-    tokenA_address = "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707";
-    tokenB_address = "0x0165878A594ca255338adfa4d48449f69242Eb8F";
+    uniswap_factory_address = "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6";
+    router_address = "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318";
+    weth_address = "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853";
+    tokenA_address = "0x610178dA211FEF7D417bC0e6FeD39F05609AD788";
+    tokenB_address = "0xB7f8BC63BbcaD18155201308C8f3540b07f84F5e";
 
     factory = await hre.ethers.getContractAt("UniswapV2Factory", uniswap_factory_address);
     router = await hre.ethers.getContractAt("UniswapV2Router02", router_address);
