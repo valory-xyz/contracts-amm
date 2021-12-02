@@ -24,6 +24,7 @@ module.exports = async (hre) => {
 
     setupData = master_contract.interface.encodeFunctionData(
         "setup",
+        // signers, threshold, to_address, data, fallback_handler, payment_token, payment, payment_receiver
         [signers, threshold, AddressZero, "0x", AddressZero, AddressZero, 0, AddressZero]
     );
 
