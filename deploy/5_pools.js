@@ -33,19 +33,19 @@ module.exports = async (hre) => {
     pairAWETHdata = factory.interface.decodeFunctionData("createPair", pairAWETH_tx_receipt.data);
     console.log("Token A - WETH pool:", pairAWETHdata[0], pairAWETHdata[1]); // Why do we have 2 addresses here?
     pair_address = await factory.allPairs(0);
-    console.log("pairAWETH:" ,pair_address);
+    console.log("Pair A - WETH address:", pair_address);
     pairA = await hre.ethers.getContractAt("UniswapV2Pair", pair_address);
     reserves = await pairA.getReserves();
-    console.log("reserves:" ,reserves);
+    console.log("Pair A - WETH reserves:", reserves.toString());
 
     pairBWETH_tx_receipt = await factory.createPair(tokenB_address, weth_address);
     pairBWETHdata = factory.interface.decodeFunctionData("createPair", pairBWETH_tx_receipt.data);
     console.log("Token B - WETH pool:", pairBWETHdata[0], pairBWETHdata[1]);
     pair_address = await factory.allPairs(1);
-    console.log("pairBWETH:" ,pair_address);
+    console.log("Pair B - WETH:", pair_address);
     pairB = await hre.ethers.getContractAt("UniswapV2Pair", pair_address);
     reserves = await pairB.getReserves();
-    console.log("reserves:" ,reserves);
+    console.log("Pair B - WETH reserves:", reserves.toString());
 
     // Set the token allowances for the router contract
     ALLOWANCE = 10 ** 10;
