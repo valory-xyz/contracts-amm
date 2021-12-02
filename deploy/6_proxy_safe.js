@@ -29,6 +29,20 @@ module.exports = async (hre) => {
     );
 
     // Deploy the proxy
-    safe_address = await proxy_factory_contract.createProxyWithNonce(master_contract.address, setupData, nonce).then((tx) => tx.wait());
-    console.log(`Safe deployed to ${safe_address}`);
+    const safe_contracts = require("@gnosis.pm/safe-contracts");
+    proxy_address = await safe_contracts.calculateProxyAddress(proxy_factory_contract, master_contract.address, setupData, nonce);
+
+    await proxy_factory_contract.createProxyWithNonce(master_contract.address, setupData, nonce).then((tx) => tx.wait());
+    console.log("Safe proxy deployed to", proxy_address);
+
+    // Log safe owners
+    const ethers = require('ethers');
+    default_mnemonic = "test test test test test test test test test test test junk";
+    path_string = "m/44'/60'/0'/0/n"
+
+    for (let i = 10; i < 14; i++) {
+        path = path_string.replace('n', i.toString())
+        wallet = ethers.Wallet.fromMnemonic(default_mnemonic, path);
+        console.log("Safe proxy owner", (i - 10).toString(), "address:", wallet.address, "key:", wallet.privateKey);
+    }
 };
