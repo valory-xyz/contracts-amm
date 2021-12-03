@@ -5,15 +5,13 @@ module.exports = async (hre) => {
     const accounts = await hre.ethers.getSigners();
 
     proxy_factory_address = "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9";
-    master_address = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
-    master_address_L2 = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
-    singleton_address = "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707";
+    gnosis_safe_address = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+    gnosis_safe_address_L2 = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
 
     // Get safe master and proxy factory instances
-    // master_contract = await hre.ethers.getContractAt("./third_party/safe-contracts/contracts/GnosisSafe.sol:GnosisSafe", master_address);
-    master_contract = await hre.ethers.getContractAt("GnosisSafeL2", master_address_L2);
+    gnosis_safe_contract = await hre.ethers.getContractAt("./third_party/safe-contracts/contracts/GnosisSafe.sol:GnosisSafe", gnosis_safe_address);
+    gnosis_safe_contract_L2 = await hre.ethers.getContractAt("GnosisSafeL2", gnosis_safe_address_L2);
     proxy_factory_contract = await hre.ethers.getContractAt("GnosisSafeProxyFactory", proxy_factory_address);
-    singleton_contract = await hre.ethers.getContractAt("Singleton", singleton_address);
 
     // Prepare deployment data
     signers =  accounts.slice(10, 14).map(
@@ -26,7 +24,7 @@ module.exports = async (hre) => {
     nonce =  0;
     AddressZero = "0x" + "0".repeat(40);
 
-    setupData = master_contract.interface.encodeFunctionData(
+    setupData = gnosis_safe_contract_L2.interface.encodeFunctionData(
         "setup",
         // signers, threshold, to_address, data, fallback_handler, payment_token, payment, payment_receiver
         [signers, threshold, AddressZero, "0x", AddressZero, AddressZero, 0, AddressZero]
@@ -34,9 +32,9 @@ module.exports = async (hre) => {
 
     // Deploy the proxy
     const safe_contracts = require("@gnosis.pm/safe-contracts");
-    proxy_address = await safe_contracts.calculateProxyAddress(proxy_factory_contract, master_contract.address, setupData, nonce);
+    proxy_address = await safe_contracts.calculateProxyAddress(proxy_factory_contract, gnosis_safe_contract_L2.address, setupData, nonce);
 
-    await proxy_factory_contract.createProxyWithNonce(singleton_contract.address, setupData, nonce).then((tx) => tx.wait());
+    await proxy_factory_contract.createProxyWithNonce(gnosis_safe_contract_L2.address, setupData, nonce).then((tx) => tx.wait());
     console.log("Safe proxy deployed to", proxy_address);
 
     // Log safe owners
