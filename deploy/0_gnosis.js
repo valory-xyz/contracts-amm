@@ -43,4 +43,10 @@ module.exports = async (hre) => {
   const fallback_manager = await FallbackManager.deploy();
   await fallback_manager.deployed();
   console.log("Gnosis fallback manager deployed to:", fallback_manager.address);
+
+  // Multisend
+  const Multisend = await hre.ethers.getContractFactory("MultiSend");
+  const multisend = await Multisend.deploy();
+  await multisend.deployed();
+  console.log("Gnosis multi-send deployed to:", multisend.address);
 };
