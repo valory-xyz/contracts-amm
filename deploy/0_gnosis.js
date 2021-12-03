@@ -32,6 +32,12 @@ module.exports = async (hre) => {
   await proxy_factory.deployed();
   console.log("Gnosis proxy factory deployed to:", proxy_factory.address);
 
+  // Singleton factory
+  const Singleton = await hre.ethers.getContractFactory("Singleton");
+  const singleton = await Singleton.deploy();
+  await singleton.deployed();
+  console.log("Gnosis singleton deployed to:", singleton.address);
+
   // Fallback manager
   const FallbackManager = await hre.ethers.getContractFactory("FallbackManager");
   const fallback_manager = await FallbackManager.deploy();
