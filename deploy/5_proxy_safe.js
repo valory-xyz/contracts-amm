@@ -50,6 +50,14 @@ module.exports = async (hre) => {
     }
 
     // Verify proxy deployment
-    proxy_contract = await hre.ethers.getContractAt("GnosisSafeProxy", proxy_address);
-    console.log(proxy_contract.masterCopy());
+    proxy_contract = await hre.ethers.getContractAt("GnosisSafeL2", proxy_address);
+    if (await proxy_contract.getThreshold() != threshold) {
+      throw new Error("incorrect threshold")
+    };
+    for (const signer of signers) {
+        const isOwner = await proxy_contract.isOwner(signer)
+        if (!isOwner) {
+          throw new Error("incorrect signer")
+        };
+    };
 };
