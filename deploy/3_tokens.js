@@ -26,7 +26,7 @@ module.exports = async (hre) => {
     }
 
     // Wrap some ETH
-    weth_address = "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6";
+    weth_address = "0x610178dA211FEF7D417bC0e6FeD39F05609AD788";
     for (let i = 10; i < accounts.length; i++) {
         // Send ETH to the WETH contract to get WETH
         await accounts[i].sendTransaction({to: weth_address, value: 10 ** 10})

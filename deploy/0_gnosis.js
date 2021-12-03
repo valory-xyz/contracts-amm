@@ -2,51 +2,27 @@ module.exports = async (hre) => {
   // Deployments are done in alphabeticall order (by file name). That's the reason for the n_ in every file name.
   // The deployment addresses seem to be derived from the contract file.
 
-  // Transaction manager contract
-  const TransactionManager = await hre.ethers.getContractFactory("./third_party/safe-contracts/contracts/GnosisSafe.sol:GnosisSafe");
-  const transaction_manager = await TransactionManager.deploy();
-  await transaction_manager.deployed();
-  console.log("Gnosis transaction manager deployed to:", transaction_manager.address);
+  async function deploy_contract(contract_name) {
+    const Contract = await hre.ethers.getContractFactory(contract_name);
+    const contract_instance = await Contract.deploy();
+    await contract_instance.deployed();
+    console.log("Gnosis", contract_name, "deployed to:", contract_instance.address);
+  }
 
-  // Transaction manager L2 contract
-  const TransactionManagerL2 = await hre.ethers.getContractFactory("GnosisSafeL2");
-  const transaction_manager_L2 = await TransactionManagerL2.deploy();
-  await transaction_manager_L2.deployed();
-  console.log("Gnosis transaction manager L2 deployed to:", transaction_manager_L2.address);
+  contract_list = [
+    "SimulateTxAccessor",
+    "GnosisSafeProxyFactory",
+    "DefaultCallbackHandler",
+    "CompatibilityFallbackHandler",
+    "CreateCall",
+    "MultiSend",
+    "MultiSendCallOnly",
+    "SignMessageLib",
+    "GnosisSafeL2",
+    "./third_party/safe-contracts/contracts/GnosisSafe.sol:GnosisSafe"
+  ]
 
-  // Owner manager contract
-  const OwnerManager = await hre.ethers.getContractFactory("OwnerManager");
-  const owner_manager = await OwnerManager.deploy();
-  await owner_manager.deployed();
-  console.log("Gnosis owner manager deployed to:", owner_manager.address);
-
-  // Module manager contract
-  const ModuleManager = await hre.ethers.getContractFactory("ModuleManager");
-  const module_manager = await ModuleManager.deploy();
-  await module_manager.deployed();
-  console.log("Gnosis module manager deployed to:", module_manager.address);
-
-  // Proxy factory
-  const ProxyFactory = await hre.ethers.getContractFactory("GnosisSafeProxyFactory");
-  const proxy_factory = await ProxyFactory.deploy();
-  await proxy_factory.deployed();
-  console.log("Gnosis proxy factory deployed to:", proxy_factory.address);
-
-  // Singleton factory
-  const Singleton = await hre.ethers.getContractFactory("Singleton");
-  const singleton = await Singleton.deploy();
-  await singleton.deployed();
-  console.log("Gnosis singleton deployed to:", singleton.address);
-
-  // Fallback manager
-  const FallbackManager = await hre.ethers.getContractFactory("FallbackManager");
-  const fallback_manager = await FallbackManager.deploy();
-  await fallback_manager.deployed();
-  console.log("Gnosis fallback manager deployed to:", fallback_manager.address);
-
-  // Multisend
-  const Multisend = await hre.ethers.getContractFactory("MultiSend");
-  const multisend = await Multisend.deploy();
-  await multisend.deployed();
-  console.log("Gnosis multi-send deployed to:", multisend.address);
+  for (const contract_name of contract_list) {
+    await deploy_contract(contract_name);
+  }
 };

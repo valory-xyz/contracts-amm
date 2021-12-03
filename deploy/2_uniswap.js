@@ -22,7 +22,7 @@ module.exports = async (hre) => {
   console.log("Uniswap factory deployed to:", factory.address);
 
   // Deploy Router02
-  weth_address = "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6";
+  weth_address = "0x610178dA211FEF7D417bC0e6FeD39F05609AD788";
   const Router = await hre.ethers.getContractFactory("UniswapV2Router02");
   const router = await Router.deploy(factory.address, weth_address);
   await router.deployed();

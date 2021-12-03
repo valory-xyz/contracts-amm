@@ -4,9 +4,9 @@ module.exports = async (hre) => {
     // Get the signers (default, pre-funded accounts)
     const accounts = await hre.ethers.getSigners();
 
-    proxy_factory_address = "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9";
-    gnosis_safe_address = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
-    gnosis_safe_address_L2 = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
+    proxy_factory_address = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
+    gnosis_safe_address = "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318";
+    gnosis_safe_address_L2 = "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6";
 
     // Get safe master and proxy factory instances
     gnosis_safe_contract = await hre.ethers.getContractAt("./third_party/safe-contracts/contracts/GnosisSafe.sol:GnosisSafe", gnosis_safe_address);
