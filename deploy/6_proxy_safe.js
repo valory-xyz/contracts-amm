@@ -49,4 +49,8 @@ module.exports = async (hre) => {
         wallet = ethers.Wallet.fromMnemonic(default_mnemonic, path);
         console.log("Safe proxy owner", (i - 10).toString(), "address:", wallet.address, "key:", wallet.privateKey);
     }
+
+    // Verify proxy deployment
+    proxy_contract = await hre.ethers.getContractAt("GnosisSafeProxy", proxy_address);
+    console.log(proxy_contract.masterCopy());
 };
