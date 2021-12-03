@@ -7,6 +7,7 @@ module.exports = async (hre) => {
     proxy_factory_address = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
     gnosis_safe_address = "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318";
     gnosis_safe_address_L2 = "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6";
+    default_fallback_handler_address = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0";
 
     // Get safe master and proxy factory instances
     gnosis_safe_contract = await hre.ethers.getContractAt("./third_party/safe-contracts/contracts/GnosisSafe.sol:GnosisSafe", gnosis_safe_address);
@@ -27,7 +28,7 @@ module.exports = async (hre) => {
     setupData = gnosis_safe_contract_L2.interface.encodeFunctionData(
         "setup",
         // signers, threshold, to_address, data, fallback_handler, payment_token, payment, payment_receiver
-        [signers, threshold, AddressZero, "0x", AddressZero, AddressZero, 0, AddressZero]
+        [signers, threshold, AddressZero, "0x", default_fallback_handler_address, AddressZero, 0, AddressZero]
     );
 
     // Deploy the proxy
