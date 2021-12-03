@@ -19,7 +19,7 @@ module.exports = async (hre) => {
     );
 
     threshold = 3; // 3 out of 4 signers
-    nonce =  new Date().getTime();
+    nonce =  0;
     AddressZero = "0x" + "0".repeat(40);
 
     setupData = master_contract.interface.encodeFunctionData(
