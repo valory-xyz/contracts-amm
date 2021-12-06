@@ -28,14 +28,14 @@ module.exports = async (hre) => {
     tokenB = await hre.ethers.getContractAt("UniswapV2ERC20", tokenB_address);
 
 
-    // Deploy pools A-WETH and B-WETH
+    // Deploy pools A-WETH and B-WETH and A-B
     pairAWETH_tx_receipt = await factory.createPair(tokenA_address, weth_address);
     pairAWETHdata = factory.interface.decodeFunctionData("createPair", pairAWETH_tx_receipt.data);
     console.log("Token A - WETH pool:", pairAWETHdata[0], pairAWETHdata[1]); // Why do we have 2 addresses here?
     pair_address = await factory.allPairs(0);
     console.log("Pair A - WETH address:", pair_address);
-    pairA = await hre.ethers.getContractAt("UniswapV2Pair", pair_address);
-    reserves = await pairA.getReserves();
+    pairAWETH = await hre.ethers.getContractAt("UniswapV2Pair", pair_address);
+    reserves = await pairAWETH.getReserves();
     console.log("Pair A - WETH reserves:", reserves.toString());
 
     pairBWETH_tx_receipt = await factory.createPair(tokenB_address, weth_address);
@@ -43,9 +43,18 @@ module.exports = async (hre) => {
     console.log("Token B - WETH pool:", pairBWETHdata[0], pairBWETHdata[1]);
     pair_address = await factory.allPairs(1);
     console.log("Pair B - WETH:", pair_address);
-    pairB = await hre.ethers.getContractAt("UniswapV2Pair", pair_address);
-    reserves = await pairB.getReserves();
+    pairBWETH = await hre.ethers.getContractAt("UniswapV2Pair", pair_address);
+    reserves = await pairBWETH.getReserves();
     console.log("Pair B - WETH reserves:", reserves.toString());
+
+    pairAB_tx_receipt = await factory.createPair(tokenA_address, tokenB_address);
+    pairABdata = factory.interface.decodeFunctionData("createPair", pairAB_tx_receipt.data);
+    console.log("Token A - Token B pool:", pairABdata[0], pairABdata[1]);
+    pair_address = await factory.allPairs(2);
+    console.log("Pair A - B:", pair_address);
+    pairAB = await hre.ethers.getContractAt("UniswapV2Pair", pair_address);
+    reserves = await pairAB.getReserves();
+    console.log("Pair A - B reserves:", reserves.toString());
 
     // Set the token allowances for the router contract
     ALLOWANCE = 10 ** 10;
@@ -84,11 +93,13 @@ module.exports = async (hre) => {
     }
 
     // Add liquidity
-    amount_A = 10 ** 4
-    min_amount_A = 10 ** 3
-    amount_WETH = 10 ** 4
+    amount_A = 10 ** 8
+    amount_B = 10 ** 8
+    min_amount_A = 10 ** 7
+    min_amount_B = 10 ** 7
+    amount_WETH = 10 ** 8
     amount_ETH = amount_WETH
-    min_amount_WETH = 10 ** 3
+    min_amount_WETH = 10 ** 7
     min_amount_ETH = min_amount_WETH
     deadline = Date.now() + 1000
     to_address = accounts[10].address;
@@ -103,13 +114,44 @@ module.exports = async (hre) => {
     router.connect(accounts[10]).addLiquidity(
       weth.address,
       tokenA.address,
-      amount_A,
       amount_WETH,
-      min_amount_A,
+      amount_A,
       min_amount_WETH,
+      min_amount_A,
       to_address,
       deadline
     );
+
+    reserves = await pairAWETH.getReserves();
+    console.log("Pair A - WETH reserves:", reserves.toString());
+
+    router.connect(accounts[10]).addLiquidity(
+      weth.address,
+      tokenB.address,
+      amount_WETH,
+      amount_B,
+      min_amount_WETH,
+      min_amount_B,
+      to_address,
+      deadline
+    );
+
+    reserves = await pairBWETH.getReserves();
+    console.log("Pair B - WETH reserves:", reserves.toString());
+
+    router.connect(accounts[10]).addLiquidity(
+      tokenA.address,
+      tokenB.address,
+      amount_A,
+      amount_B,
+      min_amount_A,
+      min_amount_B,
+      to_address,
+      deadline
+    );
+
+    reserves = await pairAB.getReserves();
+    console.log("Pair A - B reserves:", reserves.toString());
 
     // Possible errors and resolutions:
     // TransferHelper::transferFrom: transferFrom failed > likely allowance or actual amount of tokens owned too low!
