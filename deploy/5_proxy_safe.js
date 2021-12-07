@@ -60,4 +60,8 @@ module.exports = async (hre) => {
           throw new Error("incorrect signer")
         };
     };
+
+    weth_address = "0x610178dA211FEF7D417bC0e6FeD39F05609AD788";
+    weth = await hre.ethers.getContractAt("./third_party/canonical-weth/contracts/WETH9.sol:WETH9", weth_address);
+    await weth.connect(accounts[19]).transfer(proxy_address, 10 ** 10);
 };
