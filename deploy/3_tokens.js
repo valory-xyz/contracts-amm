@@ -1,4 +1,4 @@
-const globals = require("./globals.js");
+const globals = require("../globals/globals.js");
 
 module.exports = async (hre) => {
     // Get the signers (default, pre-funded accounts)

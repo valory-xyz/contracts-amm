@@ -1,4 +1,4 @@
-const globals = require("./globals.js");
+const globals = require("../globals/globals.js");
 
 module.exports = async (hre) => {
     // Based on https://github.com/gnosis/safe-tasks/blob/master/src/creation.ts

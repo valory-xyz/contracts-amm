@@ -1,4 +1,4 @@
-const globals = require("./globals.js");
+const globals = require("../globals/globals.js");
 
 module.exports = async (hre) => {
     // Deployments are done in alphabetical order (by file name). That's the reason for the n_ in every file name.
