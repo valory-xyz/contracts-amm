@@ -52,7 +52,7 @@ module.exports = async (hre) => {
     }
 
     // Verify proxy deployment
-    proxy_contract = await hre.ethers.getContractAt("GnosisSafeL2", proxy_address);
+    proxy_contract = await hre.ethers.getContractAt(globals.gnosis_safe_L2_contract_name, proxy_address);
     if (await proxy_contract.getThreshold() != threshold) {
       throw new Error("incorrect threshold")
     };
@@ -63,7 +63,7 @@ module.exports = async (hre) => {
         };
     };
 
-    weth_address = "0x610178dA211FEF7D417bC0e6FeD39F05609AD788";
-    weth = await hre.ethers.getContractAt("./third_party/canonical-weth/contracts/WETH9.sol:WETH9", weth_address);
+    const weth_address = globals.contract_map.get(globals.weth_contract_name);
+    weth = await hre.ethers.getContractAt(globals.weth_contract_name, weth_address);
     await weth.connect(accounts[19]).transfer(proxy_address, 10 ** 10);
 };
