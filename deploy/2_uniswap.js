@@ -1,3 +1,5 @@
+const globals = require("../globals/globals.js");
+
 module.exports = async (hre) => {
   // Get the signers (default, pre-funded accounts)
   const accounts = await hre.ethers.getSigners();
@@ -15,16 +17,17 @@ module.exports = async (hre) => {
   // // 0xab4f7a0b05a05bbf79ea6b22591c6fa5b03ade3988ee445391cbb95a33e4bc2b
 
   // Deploy Uniswap factory
-  feeToSetter_address = accounts[2].address;
-  const Factory = await hre.ethers.getContractFactory("UniswapV2Factory");
-  const factory = await Factory.deploy(feeToSetter_address);
+  const Factory = await hre.ethers.getContractFactory(globals.factory_contract_name);
+  const factory = await Factory.deploy(accounts[2].address);
   await factory.deployed();
   console.log("Uniswap factory deployed to:", factory.address);
+  globals.contract_map.set(globals.factory_contract_name, factory.address);
 
   // Deploy Router02
-  weth_address = "0x610178dA211FEF7D417bC0e6FeD39F05609AD788";
-  const Router = await hre.ethers.getContractFactory("UniswapV2Router02");
+  const weth_address = globals.contract_map.get(globals.weth_contract_name);
+  const Router = await hre.ethers.getContractFactory(globals.router_contract_name);
   const router = await Router.deploy(factory.address, weth_address);
   await router.deployed();
   console.log("Uniswap router02 deployed to:", router.address);
+  globals.contract_map.set(globals.router_contract_name, router.address);
 };

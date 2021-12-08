@@ -1,18 +1,20 @@
+const globals = require("../globals/globals.js");
+
 module.exports = async (hre) => {
     // Based on https://github.com/gnosis/safe-tasks/blob/master/src/creation.ts
 
     // Get the signers (default, pre-funded accounts)
     const accounts = await hre.ethers.getSigners();
 
-    proxy_factory_address = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
-    gnosis_safe_address = "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318";
-    gnosis_safe_address_L2 = "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6";
-    default_fallback_handler_address = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0";
+    // Get safe master and proxy factory instances and addresses
+    const gnosis_safe_address = globals.contract_map.get(globals.gnosis_safe_contract_name);
+    gnosis_safe_contract = await hre.ethers.getContractAt(globals.gnosis_safe_contract_name, gnosis_safe_address);
+    const gnosis_safe_address_L2 = globals.contract_map.get(globals.gnosis_safe_L2_contract_name);
+    gnosis_safe_contract_L2 = await hre.ethers.getContractAt(globals.gnosis_safe_L2_contract_name, gnosis_safe_address_L2);
+    const proxy_factory_address = globals.contract_map.get(globals.gnosis_proxy_factory_contract_name);
+    proxy_factory_contract = await hre.ethers.getContractAt(globals.gnosis_proxy_factory_contract_name, proxy_factory_address);
+    const default_fallback_handler_address = globals.contract_map.get(globals.default_fallback_handler_contract_name);
 
-    // Get safe master and proxy factory instances
-    gnosis_safe_contract = await hre.ethers.getContractAt("./third_party/safe-contracts/contracts/GnosisSafe.sol:GnosisSafe", gnosis_safe_address);
-    gnosis_safe_contract_L2 = await hre.ethers.getContractAt("GnosisSafeL2", gnosis_safe_address_L2);
-    proxy_factory_contract = await hre.ethers.getContractAt("GnosisSafeProxyFactory", proxy_factory_address);
 
     // Prepare deployment data
     signers =  accounts.slice(10, 14).map(
@@ -50,7 +52,7 @@ module.exports = async (hre) => {
     }
 
     // Verify proxy deployment
-    proxy_contract = await hre.ethers.getContractAt("GnosisSafeL2", proxy_address);
+    proxy_contract = await hre.ethers.getContractAt(globals.gnosis_safe_L2_contract_name, proxy_address);
     if (await proxy_contract.getThreshold() != threshold) {
       throw new Error("incorrect threshold")
     };
@@ -61,7 +63,7 @@ module.exports = async (hre) => {
         };
     };
 
-    weth_address = "0x610178dA211FEF7D417bC0e6FeD39F05609AD788";
-    weth = await hre.ethers.getContractAt("./third_party/canonical-weth/contracts/WETH9.sol:WETH9", weth_address);
+    const weth_address = globals.contract_map.get(globals.weth_contract_name);
+    weth = await hre.ethers.getContractAt(globals.weth_contract_name, weth_address);
     await weth.connect(accounts[19]).transfer(proxy_address, 10 ** 10);
 };
