@@ -147,5 +147,9 @@ task("extra-compile", "Compile, updates contracts, then run node")
       url: "https://eth-mainnet.alchemyapi.io/v2/<key>",
       blockNumber: 13669330
     }
+  },
+  tenderly: {
+    username: "denim",
+    project: "project"
   }
 };
