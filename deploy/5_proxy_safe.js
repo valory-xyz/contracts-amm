@@ -7,14 +7,13 @@ module.exports = async (hre) => {
     const accounts = await hre.ethers.getSigners();
 
     // Get safe master and proxy factory instances and addresses
-    const gnosis_safe_contract = globals.contract_map.get(globals.gnosis_safe_contract_name);
-    const gnosis_safe_address = gnosis_safe_contract.address;
-    const gnosis_safe_contract_L2 = globals.contract_map.get(globals.gnosis_safe_L2_contract_name);
-    const gnosis_safe_address_L2 = gnosis_safe_contract_L2.address;
-    const proxy_factory_contract = globals.contract_map.get(globals.gnosis_proxy_factory_contract_name);
-    const proxy_factory_address = proxy_factory_contract.address;
-    const default_fallback_handler = globals.contract_map.get(globals.default_fallback_handler_contract_name);
-    const default_fallback_handler_address = default_fallback_handler.address;
+    const gnosis_safe_address = globals.contract_map.get(globals.gnosis_safe_contract_name);
+    gnosis_safe_contract = await hre.ethers.getContractAt(globals.gnosis_safe_contract_name, gnosis_safe_address);
+    const gnosis_safe_address_L2 = globals.contract_map.get(globals.gnosis_safe_L2_contract_name);
+    gnosis_safe_contract_L2 = await hre.ethers.getContractAt(globals.gnosis_safe_L2_contract_name, gnosis_safe_address_L2);
+    const proxy_factory_address = globals.contract_map.get(globals.gnosis_proxy_factory_contract_name);
+    proxy_factory_contract = await hre.ethers.getContractAt(globals.gnosis_proxy_factory_contract_name, proxy_factory_address);
+    const default_fallback_handler_address = globals.contract_map.get(globals.default_fallback_handler_contract_name);
 
 
     // Prepare deployment data

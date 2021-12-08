@@ -10,7 +10,7 @@ module.exports = async (hre) => {
     for (let i = 0; i < tokens.length; i++) {
         token_instance = await globals.deploy_token(tokens[i], "ERC20PresetFixedSupply", accounts[i].address);
         console.log("Token", tokens[i].name, "deployed to:", token_instance.address);
-        globals.token_map.set(tokens[i], token_instance);
+        globals.token_map.set(tokens[i], token_instance.address);
         token_instances.push(token_instance);
     }
 
@@ -22,15 +22,16 @@ module.exports = async (hre) => {
     }
 
     // Wrap some ETH
-    const weth_instance = globals.contract_map.get(globals.weth_contract_name);
+    const weth_address = globals.contract_map.get(globals.weth_contract_name);
+    weth = await hre.ethers.getContractAt(globals.weth_contract_name, weth_address);
     for (let i = 10; i < accounts.length; i++) {
         // Send ETH to the WETH contract to get WETH
-        await accounts[i].sendTransaction({to: weth_instance.address, value: 10 ** 10})
+        await accounts[i].sendTransaction({to: weth_address, value: 10 ** 10})
     }
 
     // Show balances for WETH, A, B
     for (const account of accounts) {
-        balanceWETH = await weth_instance.balanceOf(account.address);
+        balanceWETH = await weth.balanceOf(account.address);
         balanceA = await token_instances[0].balanceOf(account.address);
         balanceB = await token_instances[1].balanceOf(account.address);
         console.log("Balances of", account.address, " WETH:", balanceWETH.toString(), " tokenA:", balanceA.toString(), " tokenB", balanceB.toString());

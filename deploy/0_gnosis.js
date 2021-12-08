@@ -6,9 +6,9 @@ module.exports = async (hre) => {
 
     // Deploy all the contracts
     for (const contract_name of globals.contract_name_list) {
-        const contract_instance = await globals.deploy_contract(contract_name);
-        console.log("Contract", contract_name, "deployed to:", contract_instance.address);
-        globals.contract_map.set(contract_name, contract_instance);
+        const contract = await globals.deploy_contract(contract_name);
+        console.log("Contract", contract_name, "deployed to:", contract.address);
+        globals.contract_map.set(contract_name, contract.address);
     }
 
     await globals.verify_contract_addresses();

@@ -71,7 +71,7 @@ async function deploy_token(token, contract_name, token_owner) {
 // Verify deployed contract addresses. For testing purposes.
 async function verify_contract_addresses() {
     contract_map.forEach((value, key, map) => {
-        if (value.address != contr_addr_map.get(key)) {
+        if (value != contr_addr_map.get(key)) {
             throw new Error("Address matching failed for " + key + " contract");
         }
     });

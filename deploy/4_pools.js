@@ -5,28 +5,25 @@ module.exports = async (hre) => {
     const accounts = await hre.ethers.getSigners();
 
     // Get relevant contracts
-    const factory = globals.contract_map.get(globals.factory_contract_name);
-    uniswap_factory_address = factory.address;
-    const router = globals.contract_map.get(globals.router_contract_name);
-    const router_address = router.address;
-    const weth = globals.contract_map.get(globals.weth_contract_name);
-    const weth_address = weth.address;
-    tokenA = globals.token_map.get(globals.token_list[0]);
-    const tokenA_address = tokenA.address;
-    tokenB = globals.token_map.get(globals.token_list[1]);
-    const tokenB_address = tokenB.address;
+    const router_address = globals.contract_map.get(globals.router_contract_name);
+    router = await hre.ethers.getContractAt(globals.router_contract_name, router_address);
+    const factory_address = globals.contract_map.get(globals.factory_contract_name);
+    factory = await hre.ethers.getContractAt(globals.factory_contract_name, factory_address);
+    const weth_address = globals.contract_map.get(globals.weth_contract_name);
+    weth = await hre.ethers.getContractAt(globals.weth_contract_name, weth_address);
+    const tokenA_address = globals.token_map.get(globals.token_list[0]);
+    const tokenB_address = globals.token_map.get(globals.token_list[1]);
 
-    if (await router.factory()  != factory.address) {
+    if (await router.factory() != factory.address) {
        throw new Error("incorrect amounts")
     };
-    if (await router.WETH()  != weth.address) {
+    if (await router.WETH() != weth.address) {
        throw new Error("incorrect amounts")
     };
 
     // to check this satisfies uniswap format
     tokenA = await hre.ethers.getContractAt("UniswapV2ERC20", tokenA_address);
     tokenB = await hre.ethers.getContractAt("UniswapV2ERC20", tokenB_address);
-
 
     // Deploy pools A-WETH and B-WETH and A-B
     pairAWETH_tx_receipt = await factory.createPair(tokenA_address, weth_address);
@@ -59,15 +56,15 @@ module.exports = async (hre) => {
     // Set the token allowances for the router contract
     ALLOWANCE = 10 ** 10;
     const contracts = [weth, tokenA, tokenB];
-    let contract_allowances = new Array();
     for (let i = 10; i < accounts.length; i++) {
+        let contract_allowances = new Array();
         for (let j = 0; j < contracts.length; j++) {
-            res = contracts[j].balanceOf(accounts[i].address)
+            res = contracts[j].balanceOf(accounts[i].address);
             if (ALLOWANCE > res) {
                 throw new Error("incorrect amounts for contract " + contracts[j].name);
             }
             await contracts[j].connect(accounts[i]).approve(router_address, ALLOWANCE);
-            contract_allowance = await contracts[j].allowance(accounts[i].address, router_address)
+            contract_allowance = await contracts[j].allowance(accounts[i].address, router_address);
             if (ALLOWANCE != contract_allowance) {
                 throw new Error("incorrect amounts");
             }
@@ -78,17 +75,16 @@ module.exports = async (hre) => {
     }
 
     // Add liquidity
-    amount_A = 10 ** 8
-    amount_B = 10 ** 8
-    min_amount_A = 10 ** 7
-    min_amount_B = 10 ** 7
-    amount_WETH = 10 ** 8
-    amount_ETH = amount_WETH
-    min_amount_WETH = 10 ** 7
-    min_amount_ETH = min_amount_WETH
-    deadline = Date.now() + 1000
+    amount_A = 10 ** 8;
+    amount_B = 10 ** 8;
+    min_amount_A = 10 ** 7;
+    min_amount_B = 10 ** 7;
+    amount_WETH = 10 ** 8;
+    amount_ETH = amount_WETH;
+    min_amount_WETH = 10 ** 7;
+    min_amount_ETH = min_amount_WETH;
+    deadline = Date.now() + 1000;
     to_address = accounts[10].address;
-
 
     // sanity checks
     MINIMUM_LIQUIDITY = 10 ** 3
@@ -109,6 +105,10 @@ module.exports = async (hre) => {
 
     reserves = await pairAWETH.getReserves();
     console.log("Pair A - WETH reserves:", reserves.toString());
+    reserves_arr = reserves.toString().split(",");
+    if (reserves_arr[0] != amount_A || reserves_arr[1] != amount_WETH) {
+        throw new Error("Pair A - WETH reserves are not correct");
+    }
 
     router.connect(accounts[10]).addLiquidity(
       weth.address,
@@ -123,6 +123,9 @@ module.exports = async (hre) => {
 
     reserves = await pairBWETH.getReserves();
     console.log("Pair B - WETH reserves:", reserves.toString());
+    if (reserves_arr[0] != amount_A || reserves_arr[1] != amount_WETH) {
+        throw new Error("Pair B - WETH reserves are not correct");
+    }
 
     router.connect(accounts[10]).addLiquidity(
       tokenA.address,
@@ -137,6 +140,9 @@ module.exports = async (hre) => {
 
     reserves = await pairAB.getReserves();
     console.log("Pair A - B reserves:", reserves.toString());
+    if (reserves_arr[0] != amount_A || reserves_arr[1] != amount_B) {
+        throw new Error("Pair A - B reserves are not correct");
+    }
 
     // Possible errors and resolutions:
     // TransferHelper::transferFrom: transferFrom failed > likely allowance or actual amount of tokens owned too low!

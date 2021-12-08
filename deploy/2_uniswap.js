@@ -17,17 +17,17 @@ module.exports = async (hre) => {
   // // 0xab4f7a0b05a05bbf79ea6b22591c6fa5b03ade3988ee445391cbb95a33e4bc2b
 
   // Deploy Uniswap factory
-  const Factory = await hre.ethers.getContractFactory("UniswapV2Factory");
-  const factory_instance = await Factory.deploy(accounts[2].address);
-  factory_instance.deployed();
-  console.log("Uniswap factory deployed to:", factory_instance.address);
-  globals.contract_map.set(globals.factory_contract_name, factory_instance);
+  const Factory = await hre.ethers.getContractFactory(globals.factory_contract_name);
+  const factory = await Factory.deploy(accounts[2].address);
+  await factory.deployed();
+  console.log("Uniswap factory deployed to:", factory.address);
+  globals.contract_map.set(globals.factory_contract_name, factory.address);
 
   // Deploy Router02
-  const weth_instance = globals.contract_map.get(globals.weth_contract_name);
+  const weth_address = globals.contract_map.get(globals.weth_contract_name);
   const Router = await hre.ethers.getContractFactory(globals.router_contract_name);
-  const router_instance = await Router.deploy(factory_instance.address, weth_instance.address);
-  await router_instance.deployed();
-  console.log("Uniswap router02 deployed to:", router_instance.address);
-  globals.contract_map.set(globals.router_contract_name, router_instance);
+  const router = await Router.deploy(factory.address, weth_address);
+  await router.deployed();
+  console.log("Uniswap router02 deployed to:", router.address);
+  globals.contract_map.set(globals.router_contract_name, router.address);
 };
