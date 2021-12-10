@@ -30,5 +30,10 @@
   "dependencies": {
     "dotenv": "^10.0.0",
     "yargs": "^17.2.1"
+  },
+  "peerDependenciesMeta": {
+    "typescript": {
+      "optional": true
+    }
   }
 }
