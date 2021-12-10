@@ -41,12 +41,12 @@ module.exports = async (hre) => {
     console.log("Safe proxy deployed to", proxy_address);
 
     // Log safe owners
-    const ethers = require('ethers');
+    const ethers = require("ethers");
     default_mnemonic = "test test test test test test test test test test test junk";
     path_string = "m/44'/60'/0'/0/n";
 
     for (let i = 10; i < 14; i++) {
-        path = path_string.replace('n', i.toString());
+        path = path_string.replace("n", i.toString());
         wallet = ethers.Wallet.fromMnemonic(default_mnemonic, path);
         console.log("Safe proxy owner", (i - 10).toString(), "address:", wallet.address, "key:", wallet.privateKey);
     }
@@ -54,14 +54,14 @@ module.exports = async (hre) => {
     // Verify proxy deployment
     proxy_contract = await hre.ethers.getContractAt(globals.gnosis_safe_L2_contract_name, proxy_address);
     if (await proxy_contract.getThreshold() != threshold) {
-      throw new Error("incorrect threshold")
-    };
+        throw new Error("incorrect threshold");
+    }
     for (const signer of signers) {
-        const isOwner = await proxy_contract.isOwner(signer)
+        const isOwner = await proxy_contract.isOwner(signer);
         if (!isOwner) {
-          throw new Error("incorrect signer")
-        };
-    };
+            throw new Error("incorrect signer");
+        }
+    }
 
     const weth_address = globals.contract_map.get(globals.weth_contract_name);
     weth = await hre.ethers.getContractAt(globals.weth_contract_name, weth_address);

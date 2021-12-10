@@ -15,11 +15,11 @@ module.exports = async (hre) => {
     const tokenB_address = globals.token_map.get(globals.token_list[1]);
 
     if (await router.factory() != factory.address) {
-       throw new Error("incorrect amounts")
-    };
+        throw new Error("incorrect amounts");
+    }
     if (await router.WETH() != weth.address) {
-       throw new Error("incorrect amounts")
-    };
+        throw new Error("incorrect amounts");
+    }
 
     // to check this satisfies uniswap format
     tokenA = await hre.ethers.getContractAt("UniswapV2ERC20", tokenA_address);
@@ -87,20 +87,20 @@ module.exports = async (hre) => {
     to_address = accounts[10].address;
 
     // sanity checks
-    MINIMUM_LIQUIDITY = 10 ** 3
+    MINIMUM_LIQUIDITY = 10 ** 3;
     if ((amount_A > ALLOWANCE) || (amount_WETH > ALLOWANCE) || (amount_A < MINIMUM_LIQUIDITY) || (amount_WETH < MINIMUM_LIQUIDITY)) {
-      throw new Error("incorrect amounts")
-    };
+        throw new Error("incorrect amounts");
+    }
 
     router.connect(accounts[10]).addLiquidity(
-      weth.address,
-      tokenA.address,
-      amount_WETH,
-      amount_A,
-      min_amount_WETH,
-      min_amount_A,
-      to_address,
-      deadline
+        weth.address,
+        tokenA.address,
+        amount_WETH,
+        amount_A,
+        min_amount_WETH,
+        min_amount_A,
+        to_address,
+        deadline
     );
 
     reserves = await pairAWETH.getReserves();
@@ -111,14 +111,14 @@ module.exports = async (hre) => {
     }
 
     router.connect(accounts[10]).addLiquidity(
-      weth.address,
-      tokenB.address,
-      amount_WETH,
-      amount_B,
-      min_amount_WETH,
-      min_amount_B,
-      to_address,
-      deadline
+        weth.address,
+        tokenB.address,
+        amount_WETH,
+        amount_B,
+        min_amount_WETH,
+        min_amount_B,
+        to_address,
+        deadline
     );
 
     reserves = await pairBWETH.getReserves();
@@ -128,14 +128,14 @@ module.exports = async (hre) => {
     }
 
     router.connect(accounts[10]).addLiquidity(
-      tokenA.address,
-      tokenB.address,
-      amount_A,
-      amount_B,
-      min_amount_A,
-      min_amount_B,
-      to_address,
-      deadline
+        tokenA.address,
+        tokenB.address,
+        amount_A,
+        amount_B,
+        min_amount_A,
+        min_amount_B,
+        to_address,
+        deadline
     );
 
     reserves = await pairAB.getReserves();
@@ -150,12 +150,12 @@ module.exports = async (hre) => {
     // strange error with it claiming address is not a contract: https://github.com/Uniswap/v2-core/issues/102
 
     router.connect(accounts[10]).addLiquidityETH(
-      tokenA.address,
-      amount_A,
-      min_amount_A,
-      min_amount_ETH,
-      to_address,
-      deadline,
-      {value: amount_ETH}
+        tokenA.address,
+        amount_A,
+        min_amount_A,
+        min_amount_ETH,
+        to_address,
+        deadline,
+        {value: amount_ETH}
     );
-  };
+};

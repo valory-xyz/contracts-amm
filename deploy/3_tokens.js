@@ -26,7 +26,7 @@ module.exports = async (hre) => {
     weth = await hre.ethers.getContractAt(globals.weth_contract_name, weth_address);
     for (let i = 10; i < accounts.length; i++) {
         // Send ETH to the WETH contract to get WETH
-        await accounts[i].sendTransaction({to: weth_address, value: 10 ** 10})
+        await accounts[i].sendTransaction({to: weth_address, value: 10 ** 10});
     }
 
     // Show balances for WETH, A, B
@@ -36,4 +36,4 @@ module.exports = async (hre) => {
         balanceB = await token_instances[1].balanceOf(account.address);
         console.log("Balances of", account.address, " WETH:", balanceWETH.toString(), " tokenA:", balanceA.toString(), " tokenB", balanceB.toString());
     }
-  };
+};
