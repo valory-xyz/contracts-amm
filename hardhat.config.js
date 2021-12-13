@@ -1,6 +1,6 @@
 require("@nomiclabs/hardhat-waffle");
 require("solidity-coverage");
-require('hardhat-deploy');
+require("hardhat-deploy");
 require("@ethersproject/constants");
 require("@gnosis.pm/safe-contracts");
 
@@ -41,115 +41,119 @@ require("@gnosis.pm/safe-contracts");
 
 // This is a sample Hardhat task. To learn how to create your own go to
 // https://hardhat.org/guides/create-task.html
-task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
-  const accounts = await hre.ethers.getSigners();
 
-  for (const account of accounts) {
-    console.log(account.address);
-  }
+// eslint-disable-next-line
+task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
+    const accounts = await hre.ethers.getSigners();
+
+    for (const account of accounts) {
+        console.log(account.address);
+    }
 });
 
+// eslint-disable-next-line
 task("deploy-contracts", "Deploys and verifies contracts")
-  .setAction(async (_, hre) => {
-      await hre.run("deploy")
-  });
+    .setAction(async (_, hre) => {
+        await hre.run("deploy");
+    });
 
+// eslint-disable-next-line
 task("extra-compile", "Compile, updates contracts, then run node")
-  .addParam("port", "The port for the node")
-  .setAction(async (taskArgs, hre) => {
-      await hre.run("compile")
+    .addParam("port", "The port for the node")
+    .setAction(async (taskArgs, hre) => {
+        await hre.run("compile");
 
-      var json = require('./artifacts/third_party/v2-core/contracts/UniswapV2Pair.sol/UniswapV2Pair.json')
-      actual_bytecode = json["bytecode"]
-      init_hash = hre.ethers.utils.keccak256(actual_bytecode)
-      init_hash_replace = init_hash.slice(2)
-      // const STANDARD_HASH = "96e8ac4277198ff8b6f785478aa9a39f403cb768dd02cbee326c3e7da348845f"
-      const fs = require('fs')
-      const path = './third_party/v2-periphery/contracts/libraries/UniswapV2Library.sol'
-      fs.readFile(path, 'utf8', function (err,data) {
-        if (err) {
-          return console.log(err);
-        }
-        var result = data.replace(/96e8ac4277198ff8b6f785478aa9a39f403cb768dd02cbee326c3e7da348845f/g, init_hash_replace);
+        var json = require("./artifacts/third_party/v2-core/contracts/UniswapV2Pair.sol/UniswapV2Pair.json");
+        const actualBytecode = json["bytecode"];
+        const initHash = hre.ethers.utils.keccak256(actualBytecode);
+        const initHashReplace = initHash.slice(2);
+        // const STANDARD_HASH = "96e8ac4277198ff8b6f785478aa9a39f403cb768dd02cbee326c3e7da348845f"
+        const fs = require("fs");
+        const path = "./third_party/v2-periphery/contracts/libraries/UniswapV2Library.sol";
+        fs.readFile(path, "utf8", function (err,data) {
+            if (err) {
+                return console.log(err);
+            }
+            var result = data.replace(/96e8ac4277198ff8b6f785478aa9a39f403cb768dd02cbee326c3e7da348845f/g, initHashReplace);
 
-        fs.writeFile(path, result, 'utf8', function (err) {
-           if (err) return console.log(err);
+            fs.writeFile(path, result, "utf8", function (err) {
+                if (err) return console.log(err);
+            });
         });
-      });
       
-      await hre.run("node", {port: parseInt(taskArgs.port)})
-  });
+        await hre.run("node", {port: parseInt(taskArgs.port)});
+    });
 
 
 /**
  * @type import('hardhat/config').HardhatUserConfig
  */
- module.exports = {
-  solidity: {
-    compilers: [
-      {
-        version: "0.5.16",
-        settings: {
-          optimizer: {
-            enabled: true,
-            runs: 1000,
-          },
-        },
-      },
-      {
-        version: "0.6.6",
-        evmVersion: "istanbul",
-        settings: {
-          optimizer: {
-            enabled: true,
-            runs: 999999,
-          },
-        },
-      },
-      {
-        version: "0.7.1",
-        settings: {
-          optimizer: {
-            enabled: true,
-            runs: 1000,
-          },
-        },
-      },
-      {
-        version: "0.7.0",
-        settings: {
-          optimizer: {
-            enabled: true,
-            runs: 1000,
-          },
-        },
-      },
-    ],
-  },
-  paths: {
-    sources: "./third_party",
-    tests: "./test",
-    cache: "./cache",
-    artifacts: "./artifacts"
-  },
-  networks: {
-    ganache: {
-      url: 'http://localhost:8545'
-    }
-  },
-  etherscan: {
+module.exports = {
+    solidity: {
+        compilers: [
+            {
+                version: "0.5.16",
+                settings: {
+                    optimizer: {
+                        enabled: true,
+                        runs: 1000,
+                    },
+                },
+            },
+            {
+                version: "0.6.6",
+                evmVersion: "istanbul",
+                settings: {
+                    optimizer: {
+                        enabled: true,
+                        runs: 999999,
+                    },
+                },
+            },
+            {
+                version: "0.7.1",
+                settings: {
+                    optimizer: {
+                        enabled: true,
+                        runs: 1000,
+                    },
+                },
+            },
+            {
+                version: "0.7.0",
+                settings: {
+                    optimizer: {
+                        enabled: true,
+                        runs: 1000,
+                    },
+                },
+            },
+        ],
+    },
+    paths: {
+        sources: "./third_party",
+        tests: "./test",
+        cache: "./cache",
+        artifacts: "./artifacts"
+    },
+    networks: {
+        ganache: {
+            url: "http://localhost:8545"
+        }
+    },
+    etherscan: {
     // Your API key for Etherscan
     // Obtain one at https://etherscan.io/
-    apiKey: ""
-  },
-  hardhat: {
-    forking: {
-      url: "https://eth-mainnet.alchemyapi.io/v2/<key>",
-      blockNumber: 13669330
+        apiKey: ""
+    },
+    hardhat: {
+        forking: {
+            url: "https://eth-mainnet.alchemyapi.io/v2/<key>",
+            blockNumber: 13669330
+        }
+    },
+    tenderly: {
+        username: "denim",
+        project: "project"
     }
-  },
-  tenderly: {
-    username: "denim",
-    project: "project"
-  }
 };
