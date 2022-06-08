@@ -32,6 +32,10 @@ To run a Hardhat node and deploy to it:
 yarn run hardhat extra-compile --port <port>
 ```
 
+To run Hardhat tests:
+```shell
+npx hardhat test
+
 Other relevant tasks:
 
 ```shell
