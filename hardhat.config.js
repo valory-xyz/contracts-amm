@@ -3,6 +3,7 @@ require("solidity-coverage");
 require("hardhat-deploy");
 require("@ethersproject/constants");
 require("@gnosis.pm/safe-contracts");
+require("hardhat-gas-reporter");
 
 // import('hardhat/config').HardhatUserConfig;
 // import('hardhat/config').HttpNetworkUserConfig;
@@ -80,7 +81,7 @@ task("extra-compile", "Compile, updates contracts, then run node")
                 if (err) return console.log(err);
             });
         });
-      
+
         await hre.run("node", {port: parseInt(taskArgs.port)});
     });
 
@@ -155,5 +156,23 @@ module.exports = {
     tenderly: {
         username: "denim",
         project: "project"
-    }
+    },
+    gasReporter: {
+        enabled: true,
+        currency: "USD",
+
+        // Ethereum
+        token: "ETH",  // The reference token for gas price
+        gasPriceApi: "https://api.etherscan.io/api?module=proxy&action=eth_gasPrice",
+
+        // Avalanche
+        // token: "AVAX",  // The reference token for gas price
+        // gasPriceApi: "https://api.snowtrace.io/api?module=proxy&action=eth_gasPrice",
+
+        // Polygon
+        // token: "MATIC",  // The reference token for gas price
+        // gasPriceApi: "https://api.polygonscan.com/api?module=proxy&action=eth_gasPrice",
+
+        coinmarketcap: "",
+      },
 };

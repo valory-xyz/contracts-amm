@@ -25,7 +25,8 @@
     "ethers": "^5.5.1",
     "hardhat": "^2.6.8",
     "hardhat-deploy": "^0.9.10",
-    "solidity-coverage": "^0.7.17"
+    "solidity-coverage": "^0.7.17",
+    "hardhat-gas-reporter": "^1.0.8"
   },
   "dependencies": {
     "dotenv": "^10.0.0",

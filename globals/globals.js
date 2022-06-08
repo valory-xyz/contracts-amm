@@ -74,7 +74,7 @@ async function deployToken(token, contractName, tokenOwner) {
 async function verifyContractAddresses() {
     contractMap.forEach((value, key) => {
         if (value != contrAddrMap.get(key)) {
-            throw new Error("Address matching failed for " + key + " contract");
+            throw new Error("Address matching failed for " + key + " contract: expected " + contrAddrMap.get(key) + ", got " + value);
         }
     });
 }
